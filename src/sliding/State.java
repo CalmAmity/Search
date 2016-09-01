@@ -1,17 +1,27 @@
 package sliding;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class State extends core.State {
+public class State extends core.State implements Comparable<State> {
 	public static final Integer blankValue = 0;
 	List<List<Integer>> state;
 	int width;
 	int height;
 	int xBlank;
 	int yBlank;
+	int cost;
+	private Integer heuristicDistance;
 	
 	public State(int width, int height) {
+		this(width, height, false);
+	}
+	
+	public State(int width, int height, boolean determineHeuristicDistance) {
 		this.width = width;
 		this.height = height;
 		
@@ -74,6 +84,18 @@ public class State extends core.State {
 		return state.get(y).get(x);
 	}
 	
+	public Pair<Integer, Integer> findTilePosition(Integer tile) {
+		for (int row = 0; row < height; row++) {
+			for (int column = 0; column < width; column++) {
+				if (tile.equals(findTileAt(column, row))) {
+					return new ImmutablePair<>(column, row);
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	private void overwriteTileAt(int x, int y, Integer newTile) {
 		state.get(y).set(x, newTile);
 	}
@@ -101,6 +123,7 @@ public class State extends core.State {
 		successor.xBlank += action.relPosX;
 		successor.yBlank += action.relPosY;
 		successor.setPredecessor(this);
+		successor.cost = this.cost + 1;
 		return successor;
 	}
 	
@@ -118,6 +141,29 @@ public class State extends core.State {
 	public boolean isGoalState() {
 		State goalState = new State(width, height);
 		return this.equals(goalState);
+	}
+	
+	public int determineHeuristicDistance() {
+		if (heuristicDistance != null) {
+			return heuristicDistance;
+		}
+		
+		return heuristicDistance = determineManhattanDistance(new State(width, height));
+	}
+	
+	public int determineManhattanDistance(State otherState) {
+		int totalDistance = 0;
+		for (int row = 0; row < height; row++) {
+			for (int column = 0; column < width; column++) {
+				Integer tile = findTileAt(column, row);
+				Pair<Integer, Integer> positionInOtherState = otherState.findTilePosition(tile);
+				int xDistance = Math.abs(column - positionInOtherState.getLeft());
+				int yDistance = Math.abs(row - positionInOtherState.getRight());
+				totalDistance += xDistance + yDistance;
+			}
+		}
+		
+		return totalDistance;
 	}
 	
 	@Override
@@ -176,5 +222,10 @@ public class State extends core.State {
 	
 	public int getyBlank() {
 		return yBlank;
+	}
+	
+	@Override
+	public int compareTo(State otherState) {
+		return (this.cost + this.determineHeuristicDistance()) - (otherState.cost + otherState.determineHeuristicDistance());
 	}
 }

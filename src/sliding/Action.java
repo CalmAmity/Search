@@ -6,8 +6,8 @@ public enum Action {
 	SLIDE_LEFT(1, 0),
 	SLIDE_RIGHT(-1, 0);
 	
-	int relPosX;
-	int relPosY;
+	public final int relPosX;
+	public final int relPosY;
 	
 	Action(int x, int y) {
 		relPosX = x;
