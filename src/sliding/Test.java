@@ -3,13 +3,10 @@ package sliding;
 import core.BreadthFirstTree;
 import core.DepthFirstGraph;
 
-public class Test
-{
-	public static void main(String[] args)
-	{
+public class Test {
+	public static void main(String[] args) {
 		State startState = new State(3, 3);
-		for (int step = 0; step < 15; step++)
-		{
+		for (int step = 0; step < 15; step++) {
 			startState = startState.randomMove();
 		}
 		
@@ -17,33 +14,27 @@ public class Test
 		startState = new State(startState);
 		
 		DepthFirstGraph depthFirstGraph = new DepthFirstGraph(startState);
-		while (depthFirstGraph.next())
-		{
+		while (depthFirstGraph.next()) {
 			
 		}
 	}
 	
-	public static void testBFS()
-	{
+	public static void testBFS() {
 		State startState = new State(3, 3);
-		for (int step = 0; step < 15; step++)
-		{
+		for (int step = 0; step < 15; step++) {
 			startState = startState.randomMove();
 		}
 		
 		BreadthFirstTree breadthFirstTree = new BreadthFirstTree(new State(startState));
-		while (breadthFirstTree.next())
-		{
+		while (breadthFirstTree.next()) {
 			
 		}
 	}
 	
-	public static void testCopy()
-	{
+	public static void testCopy() {
 		State startState = new State(3, 3);
 		System.out.println(startState);
-		for (int step = 0; step < 150; step++)
-		{
+		for (int step = 0; step < 150; step++) {
 			startState = startState.randomMove();
 		}
 		System.out.println("START STATE AFTER RANDOM MOVE");
@@ -51,8 +42,7 @@ public class Test
 		State copyState = new State(startState);
 		System.out.println("COPY STATE");
 		System.out.println(copyState);
-		for (int step = 0; step < 150; step++)
-		{
+		for (int step = 0; step < 150; step++) {
 			copyState = copyState.randomMove();
 		}
 		System.out.println("START STATE AFTER RANDOM MOVE IN COPY STATE");
@@ -61,14 +51,12 @@ public class Test
 		System.out.println(copyState);
 	}
 	
-	public static void testInit()
-	{
+	public static void testInit() {
 		State startState = new State(3, 3);
 		System.out.println(startState);
 		System.out.println("scrambling...");
 		
-		for (int step = 0; step < 150; step++)
-		{
+		for (int step = 0; step < 150; step++) {
 			startState.randomMove();
 			System.out.println(startState);
 			System.out.println("---------");

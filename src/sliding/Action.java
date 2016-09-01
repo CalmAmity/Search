@@ -1,7 +1,6 @@
 package sliding;
 
-public enum Action
-{
+public enum Action {
 	SLIDE_UP(0, 1),
 	SLIDE_DOWN(0, -1),
 	SLIDE_LEFT(1, 0),
@@ -10,8 +9,7 @@ public enum Action
 	int relPosX;
 	int relPosY;
 	
-	Action(int x, int y)
-	{
+	Action(int x, int y) {
 		relPosX = x;
 		relPosY = y;
 	}
