@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import util.Point;
+
 public class State extends core.State implements Comparable<State> {
 	public static final Integer blankValue = 0;
 	List<List<Integer>> state;
@@ -84,11 +86,11 @@ public class State extends core.State implements Comparable<State> {
 		return state.get(y).get(x);
 	}
 	
-	public Pair<Integer, Integer> findTilePosition(Integer tile) {
+	public Point.IntegerPoint findTilePosition(Integer tile) {
 		for (int row = 0; row < height; row++) {
 			for (int column = 0; column < width; column++) {
 				if (tile.equals(findTileAt(column, row))) {
-					return new ImmutablePair<>(column, row);
+					return new Point.IntegerPoint(column, row);
 				}
 			}
 		}
@@ -156,9 +158,9 @@ public class State extends core.State implements Comparable<State> {
 		for (int row = 0; row < height; row++) {
 			for (int column = 0; column < width; column++) {
 				Integer tile = findTileAt(column, row);
-				Pair<Integer, Integer> positionInOtherState = otherState.findTilePosition(tile);
-				int xDistance = Math.abs(column - positionInOtherState.getLeft());
-				int yDistance = Math.abs(row - positionInOtherState.getRight());
+				Point.IntegerPoint positionInOtherState = otherState.findTilePosition(tile);
+				int xDistance = Math.abs(column - positionInOtherState.determineCoordinate(0));
+				int yDistance = Math.abs(row - positionInOtherState.determineCoordinate(1));
 				totalDistance += xDistance + yDistance;
 			}
 		}
