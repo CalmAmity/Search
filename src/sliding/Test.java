@@ -3,11 +3,6 @@ package sliding;
 import core.BreadthFirstTree;
 import core.DepthFirstGraph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-
 public class Test {
 	public static void main(String[] args) {
 		testAStar();
