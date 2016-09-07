@@ -1,15 +1,15 @@
-package core;
+package path;
 
 import java.util.Stack;
 
-public class PathSearch {
-	protected void printPathToState(State state) {
-		State currentState = state;
-		Stack<State> goalPath = new Stack<>();
+public class PathSearchUtil {
+	public static void printPathToState(path.State state) {
+		path.State currentState = state;
+		Stack<path.State> goalPath = new Stack<>();
 		goalPath.push(currentState);
 		while (currentState != null) {
 			goalPath.push(currentState);
-			currentState = currentState.predecessor;
+			currentState = currentState.getPredecessor();
 		}
 		
 		while (!goalPath.isEmpty()) {

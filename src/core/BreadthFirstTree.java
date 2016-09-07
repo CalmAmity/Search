@@ -3,22 +3,23 @@ package core;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class BreadthFirstTree extends PathSearch {
+import path.PathSearchUtil;
+
+public class BreadthFirstTree extends PathSearchUtil {
 	Queue<State> frontier;
 	
-	public BreadthFirstTree(sliding.State startState) {
+	public BreadthFirstTree(State startState) {
 		frontier = new ArrayDeque<>();
 		frontier.add(startState);
 	}
 	
-	public boolean next() {
-		State currentState = frontier.poll();
-		if (currentState.isGoalState()) {
-			printPathToState(currentState);
-			return false;
-		}
-		frontier.addAll(currentState.determineSuccessors());
+	public State run() {
+		State currentState;
+		do {
+			currentState = frontier.poll();
+			frontier.addAll(currentState.determineChildren());
+		} while (!currentState.isGoalState());
 		
-		return true;
+		return currentState;
 	}
 }

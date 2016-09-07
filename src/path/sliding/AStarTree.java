@@ -1,12 +1,11 @@
-package sliding;
+package path.sliding;
 
-import core.PathSearch;
+import path.PathSearchUtil;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class AStarTree extends PathSearch{
+public class AStarTree extends PathSearchUtil {
 	private Queue<State> frontier;
 	
 	public AStarTree(State startState) {
@@ -26,7 +25,7 @@ public class AStarTree extends PathSearch{
 			System.out.println("FINAL COST: " + finalCost);
 			return false;
 		}
-		frontier.addAll(currentState.determineSuccessors());
+		frontier.addAll(currentState.determineChildren());
 		
 		return true;
 	}

@@ -22,6 +22,7 @@ public abstract class Point<T extends Number> {
 		T result = null;
 		
 		for (int coordinate = 0; coordinate < determineNrDimensions(); coordinate++) {
+			// TODO take the absolute of the result of the second add() call
 			result = add(result, add(this.position.get(coordinate), otherPoint.position.get(coordinate)));
 		}
 		

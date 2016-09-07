@@ -1,4 +1,4 @@
-package sliding;
+package path.sliding;
 
 import core.Heuristic;
 import util.Point;

@@ -1,11 +1,12 @@
-package sliding;
+package path.sliding;
 
 import core.BreadthFirstTree;
 import core.DepthFirstGraph;
+import path.PathSearchUtil;
 
 public class Test {
 	public static void main(String[] args) {
-		testAStar();
+		testBFS();
 	}
 	
 	public static void testCompare() {
@@ -68,9 +69,8 @@ public class Test {
 		startState = new State(startState);
 		
 		DepthFirstGraph depthFirstGraph = new DepthFirstGraph(startState);
-		while (depthFirstGraph.next()) {
-			
-		}
+		path.State goalState = (path.State) depthFirstGraph.run();
+		PathSearchUtil.printPathToState(goalState);
 	}
 	
 	public static void testBFS() {
@@ -80,9 +80,8 @@ public class Test {
 		}
 		
 		BreadthFirstTree breadthFirstTree = new BreadthFirstTree(new State(startState));
-		while (breadthFirstTree.next()) {
-			
-		}
+		path.State goalState = (path.State) breadthFirstTree.run();
+		PathSearchUtil.printPathToState(goalState);
 	}
 	
 	public static void testCopy() {

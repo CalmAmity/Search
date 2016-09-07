@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
-public class DepthFirstGraph extends PathSearch {
+import path.PathSearchUtil;
+
+public class DepthFirstGraph extends PathSearchUtil {
 	private Stack<State> frontier;
 	private Set<State> explored;
 	
@@ -15,20 +17,18 @@ public class DepthFirstGraph extends PathSearch {
 		explored = new HashSet<>();
 	}
 	
-	public boolean next() {
-		State currentState = frontier.pop();
-		if (!explored.add(currentState)) {
-			// This state was already contained in the explored set; ignore it.
-			return true;
-		}
+	public State run() {
+		State currentState;
+		do {
+			currentState = frontier.pop();
+			if (!explored.add(currentState)) {
+				// This state was already contained in the explored set; ignore it.
+				continue;
+			}
+			frontier.addAll(currentState.determineChildren());
+		} while (!currentState.isGoalState());
 		
-		if (currentState.isGoalState()) {
-			printPathToState(currentState);
-			return false;
-		}
-		frontier.addAll(currentState.determineSuccessors());
-		
-		return true;
+		return currentState;
 	}
 	
 }

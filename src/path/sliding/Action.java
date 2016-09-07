@@ -1,4 +1,4 @@
-package sliding;
+package path.sliding;
 
 public enum Action {
 	SLIDE_UP(0, 1),

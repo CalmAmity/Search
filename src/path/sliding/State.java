@@ -1,15 +1,11 @@
-package sliding;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+package path.sliding;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import util.Point;
 
-public class State extends core.State implements Comparable<State> {
+public class State extends path.State implements Comparable<State> {
 	public static final Integer blankValue = 0;
 	List<List<Integer>> state;
 	int width;
@@ -64,7 +60,7 @@ public class State extends core.State implements Comparable<State> {
 		return performAction(move);
 	}
 	
-	public List<State> determineSuccessors() {
+	public List<State> determineChildren() {
 		List<Action> possibleActions = determinePossibleActions();
 		List<State> successors = new ArrayList<>(possibleActions.size());
 		for (Action action : possibleActions) {
