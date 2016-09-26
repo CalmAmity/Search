@@ -14,29 +14,64 @@ public abstract class Point<T extends Number> {
 		position = Arrays.asList(coordinates);
 	}
 	
+	/** Calculates the Manhattan distance between this and another point. */
 	public T manhattanDistanceTo(Point<T> otherPoint) {
 		if (this.determineNrDimensions() != otherPoint.determineNrDimensions()) {
 			throw new IllegalArgumentException("Number of dimensions does not match.");
 		}
 		
 		T result = null;
-		
 		for (int coordinate = 0; coordinate < determineNrDimensions(); coordinate++) {
-			// TODO take the absolute of the result of the second add() call
-			result = add(result, add(this.position.get(coordinate), otherPoint.position.get(coordinate)));
+			// Take the absolute difference between the two coordinates (distance along this axis) and add it to the result.
+			result = sum(result, absoluteDifference(this.position.get(coordinate), otherPoint.position.get(coordinate)));
 		}
 		
 		return result;
 	}
 	
-	protected abstract T add(T number1, T number2);
+	/** @return the sum of the two parameters. */
+	protected abstract T sum(T number1, T number2);
 	
+	/** @return the absolute difference between the two parameters. */
+	protected abstract T absoluteDifference(T number1, T number2);
+	
+	/** @return the number of dimensions in the space that this point is defined in. */
 	public int determineNrDimensions() {
 		return position.size();
 	}
 	
+	/** @return The value of the coordinate of this point in the indicated dimension. */
 	public T determineCoordinate(int coordinate) {
 		return position.get(coordinate);
+	}
+	
+	@Override
+	public boolean equals(Object otherObject) {
+		if (super.equals(otherObject)) {
+			// The argument is the same object.
+			return true;
+		}
+		
+		if (!(otherObject instanceof Point)) {
+			// The argument is not an instance of Point.
+			return false;
+		}
+		
+		Point otherPoint = (Point) otherObject;
+		if (determineNrDimensions() != otherPoint.determineNrDimensions()) {
+			// The points have a different number of coordinates, meaning they are not even part of the same space.
+			return false;
+		}
+		
+		// Check every coordinate.
+		for (int dimension = 0; dimension < this.position.size(); dimension++) {
+			if (!this.determineCoordinate(dimension).equals(otherPoint.determineCoordinate(dimension))) {
+				// The coordinates for the current dimension differ between the two points.
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public static class IntegerPoint extends Point<Integer> {
@@ -45,8 +80,13 @@ public abstract class Point<T extends Number> {
 		}
 		
 		@Override
-		protected Integer add(Integer number1, Integer number2) {
+		protected Integer sum(Integer number1, Integer number2) {
 			return number1 + number2;
+		}
+		
+		@Override
+		protected Integer absoluteDifference(Integer number1, Integer number2) {
+			return Math.abs(number1 - number2);
 		}
 	}
 	
@@ -56,8 +96,23 @@ public abstract class Point<T extends Number> {
 		}
 		
 		@Override
-		protected Double add(Double number1, Double number2) {
+		protected Double sum(Double number1, Double number2) {
 			return number1 + number2;
+		}
+		
+		@Override
+		protected Double absoluteDifference(Double number1, Double number2) {
+			return Math.abs(number1 - number2);
+		}
+		
+		/**
+		 * Creates a random point within the indicated bounds in a 2-dimensional space.
+		 * @param xMax The maximum value of the first coordinate.
+		 * @param yMax The maximum value of the second coordinate.
+		 * @return A random point within the rectangle bounded by {@code (0, 0)} and {@code (xMax, yMax)}.
+		 */
+		public static DoublePoint createRandom2D(double xMax, double yMax) {
+			return new DoublePoint(Math.random() * xMax, Math.random() * yMax);
 		}
 	}
 }
