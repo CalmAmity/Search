@@ -9,8 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import util.Node;
 import util.Point;
+import util.Vertex;
 
 /**
  * Visualises a graph by drawing both the nodes and the connections between them in a frame representing the graph space.
@@ -62,13 +62,13 @@ public class Visualiser extends Frame {
 		Set<Location> alreadyVisited = new HashSet<>();
 		for (Location location : locations) {
 			alreadyVisited.add(location);
-			for (Node child : location.getChildren()) {
-				if (alreadyVisited.contains(child)) {
+			for (Vertex<Location> connection : location.getConnections()) {
+				if (alreadyVisited.contains(connection.getDestination())) {
 					continue;
 				}
 				
-				Location childLocation = (Location) child;
-				drawLine(g, location.getPoint(), childLocation.getPoint());
+				drawLine(g, location.getPoint(), connection.getDestination().getPoint());
+				//TODO: also draw cost next to line
 			}
 		}
 		

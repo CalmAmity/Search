@@ -2,8 +2,12 @@ package core;
 
 import java.util.Collection;
 
-public abstract class State {
-	public abstract boolean isGoalState();
+public interface State<S extends State<S>> {
+	boolean isGoalState();
 	
-	public abstract Collection<? extends State> determineChildren();
+	Collection<Action<S>> determineAvailableActions();
+	
+	double getHeuristicDistanceFromGoal();
+	
+	void determineHeuristicDistanceFromGoal(Heuristic<S> heuristic);
 }

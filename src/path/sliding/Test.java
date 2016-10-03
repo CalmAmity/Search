@@ -1,59 +1,13 @@
 package path.sliding;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import core.BreadthFirstTree;
 import core.DepthFirstGraph;
+import path.AStarTree;
 import path.PathSearchUtil;
-import path.route.Location;
-import path.route.Visualiser;
-import util.Point;
 
 public class Test {
 	public static void main(String[] args) {
-		final int nrLocations = 10;
-		final int width = 10;
-		final int height = 10;
-		
-		List<Location> locations = new ArrayList<>(nrLocations);
-		for (int locationIndex = 0; locationIndex < nrLocations; locationIndex++) {
-			Location location = new Location(Point.DoublePoint.createRandom2D(width, height));
-			locations.add(location);
-		}
-		
-		for (Location location : locations) {
-			while ((double) location.getChildren().size() / 5 < Math.random()) {
-				// Time to create a new link between this node and a random other node.
-				int otherLocationIndex = (int) ((double) locations.size() * Math.random());
-				location.link(locations.get(otherLocationIndex));
-			}
-		}
-		
-		Visualiser visualiser = new Visualiser(width, height, locations);
-		visualiser.setVisible(true);
-	}
-	
-	public static void testCompare() {
-		State state1 = new State(3, 3);
-		for (int step = 0; step < 50; step++) {
-			state1 = state1.randomMove();
-		}
-		System.out.println(state1);
-		
-		State state2 = new State(3, 3);
-		for (int step = 0; step < 50; step++) {
-			state2 = state2.randomMove();
-		}
-		System.out.println("---------");
-		System.out.println(state2);
-		
-		state1.cost = 10;
-		state2.cost = 15;
-		
-		System.out.println(state1.determineHeuristicDistance());
-		System.out.println(state2.determineHeuristicDistance());
-		System.out.println(state1.compareTo(state2));
+		testManhattanDistance();
 	}
 	
 	public static void testManhattanDistance() {
@@ -78,7 +32,7 @@ public class Test {
 		// Reinitialise the start state as a copy of itself, to remove any unwanted extra information.
 		startState = new State(startState);
 		
-		AStarTree aStarTree = new AStarTree(startState);
+		AStarTree aStarTree = new AStarTree(startState, new ManhattanDistance());
 		while (aStarTree.next()) {
 			
 		}

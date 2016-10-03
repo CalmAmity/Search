@@ -3,9 +3,9 @@ package path.sliding;
 import core.Heuristic;
 import util.Point;
 
-public class ManhattanDistance extends Heuristic<State> {
+public class ManhattanDistance implements Heuristic<State> {
 	@Override
-	protected int determineEstimatedTotalCost(State state) {
+	public double determineEstimatedDistanceToGoal(State state) {
 		int nrTiles = state.getWidth() * state.getHeight();
 		State goalState = new State(state.getWidth(), state.getHeight());
 		int totalDistance = 0;

@@ -17,7 +17,7 @@ public class BreadthFirstTree extends PathSearchUtil {
 		State currentState;
 		do {
 			currentState = frontier.poll();
-			frontier.addAll(currentState.determineChildren());
+			frontier.addAll(currentState.determineAvailableActions());
 		} while (!currentState.isGoalState());
 		
 		return currentState;

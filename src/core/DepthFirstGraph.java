@@ -25,7 +25,7 @@ public class DepthFirstGraph extends PathSearchUtil {
 				// This state was already contained in the explored set; ignore it.
 				continue;
 			}
-			frontier.addAll(currentState.determineChildren());
+			frontier.addAll(currentState.determineAvailableActions());
 		} while (!currentState.isGoalState());
 		
 		return currentState;

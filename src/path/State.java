@@ -1,13 +1,11 @@
 package path;
 
-public abstract class State extends core.State {
-	State predecessor;
+public interface State<S extends State<S>> extends core.State<S> {
+	State getPredecessor();
 	
-	public State getPredecessor() {
-		return predecessor;
-	}
+	void setPredecessor(S predecessor);
 	
-	public void setPredecessor(State predecessor) {
-		this.predecessor = predecessor;
-	}
+	double getCost();
+	
+	void setCost(double cost);
 }

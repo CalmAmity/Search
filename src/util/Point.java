@@ -29,6 +29,22 @@ public abstract class Point<T extends Number> {
 		return result;
 	}
 	
+	/** Calculates the euclidean distance between this and another point. */
+	public double euclideanDistanceTo(Point<T> otherPoint) {
+		if (this.determineNrDimensions() != otherPoint.determineNrDimensions()) {
+			throw new IllegalArgumentException("Number of dimensions does not match.");
+		}
+		
+		double result = 0;
+		for (int coordinate = 0; coordinate < determineNrDimensions(); coordinate++) {
+			// Take square of the absolute difference between the two coordinates (distance along this axis) and add it to the result.
+			result += Math.pow(absoluteDifference(this.position.get(coordinate), otherPoint.position.get(coordinate)).doubleValue(), 2);
+		}
+		
+		// Take the nth root of the result, where n is the number of dimensions.
+		return Math.pow(result, 1 / determineNrDimensions());
+	}
+	
 	/** @return the sum of the two parameters. */
 	protected abstract T sum(T number1, T number2);
 	

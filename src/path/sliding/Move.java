@@ -1,6 +1,6 @@
 package path.sliding;
 
-public enum Action {
+public enum Move {
 	SLIDE_UP(0, 1),
 	SLIDE_DOWN(0, -1),
 	SLIDE_LEFT(1, 0),
@@ -9,7 +9,7 @@ public enum Action {
 	public final int relPosX;
 	public final int relPosY;
 	
-	Action(int x, int y) {
+	Move(int x, int y) {
 		relPosX = x;
 		relPosY = y;
 	}

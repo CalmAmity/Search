@@ -1,19 +1,23 @@
 package path.sliding;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import core.Action;
+import core.Heuristic;
 import util.Point;
 
-public class State extends path.State implements Comparable<State> {
-	public static final Integer blankValue = 0;
-	List<List<Integer>> state;
-	int width;
-	int height;
-	int xBlank;
-	int yBlank;
-	int cost;
-	private Integer heuristicDistance;
+public class State implements path.State<State> {
+	private State predecessor;
+	private List<List<Integer>> tiles;
+	private int width;
+	private int height;
+	private int xBlank;
+	private int yBlank;
+	private int cost;
+	private Double heuristicDistanceFromGoal;
 	
 	public State(int width, int height) {
 		this(width, height, false);
@@ -26,7 +30,7 @@ public class State extends path.State implements Comparable<State> {
 		// Create the solved state.
 		xBlank = 0;
 		yBlank = 0;
-		state = new ArrayList<>(width);
+		tiles = new ArrayList<>(width);
 		Integer currentTile = 0;
 		for (int row = 0; row < height; row++) {
 			List<Integer> currentRow = new ArrayList<>(width);
@@ -34,7 +38,7 @@ public class State extends path.State implements Comparable<State> {
 				currentRow.add(currentTile);
 				currentTile++;
 			}
-			state.add(currentRow);
+			tiles.add(currentRow);
 		}
 	}
 	
@@ -43,31 +47,30 @@ public class State extends path.State implements Comparable<State> {
 		this.height = stateToCopy.getHeight();
 		this.xBlank = stateToCopy.getxBlank();
 		this.yBlank = stateToCopy.getyBlank();
-		state = new ArrayList<>(width);
+		tiles = new ArrayList<>(width);
 		for (int row = 0; row < height; row++) {
 			List<Integer> currentRow = new ArrayList<>(width);
 			for (int column = 0; column < width; column++) {
 				currentRow.add(stateToCopy.findTileAt(column, row));
 			}
-			state.add(currentRow);
+			tiles.add(currentRow);
 		}
 	}
 	
 	public State randomMove() {
 		// Decide (at random) in which direction to slide.
-		List<Action> possibleActions = determinePossibleActions();
-		Action move = possibleActions.get((int) (Math.random() * possibleActions.size()));
-		return performAction(move);
+		List<Move> possibleMoves = determinePossibleMoves();
+		Move move = possibleMoves.get((int) (Math.random() * possibleMoves.size()));
+		return performMove(move);
 	}
 	
-	public List<State> determineChildren() {
-		List<Action> possibleActions = determinePossibleActions();
-		List<State> successors = new ArrayList<>(possibleActions.size());
-		for (Action action : possibleActions) {
-			successors.add(performAction(action));
-		}
+	@Override
+	public Collection<Action<State>> determineAvailableActions() {
+		List<Move> possibleMoves = determinePossibleMoves();
+		List<Action<State>> actions = new ArrayList<>(possibleMoves.size());
+		actions.addAll(possibleMoves.stream().map(move -> new Action<>(performMove(move), 1)).collect(Collectors.toList()));
 		
-		return successors;
+		return actions;
 	}
 	
 	static State createRandom(int width, int height, int nrSteps) {
@@ -79,7 +82,7 @@ public class State extends path.State implements Comparable<State> {
 	}
 	
 	public Integer findTileAt(int x, int y) {
-		return state.get(y).get(x);
+		return tiles.get(y).get(x);
 	}
 	
 	public Point.IntegerPoint findTilePosition(Integer tile) {
@@ -95,7 +98,7 @@ public class State extends path.State implements Comparable<State> {
 	}
 	
 	private void overwriteTileAt(int x, int y, Integer newTile) {
-		state.get(y).set(x, newTile);
+		tiles.get(y).set(x, newTile);
 	}
 	
 	/**
@@ -107,46 +110,39 @@ public class State extends path.State implements Comparable<State> {
 		overwriteTileAt(secondX, secondY, tileAtFirstPosition);
 	}
 	
-	public boolean isActionPossible(Action action) {
+	public boolean isMovePossible(Move move) {
 		// Determine the position of the tile that would be slid as a result of this action.
-		int xTile = xBlank + action.relPosX;
-		int yTile = yBlank + action.relPosY;
+		int xTile = xBlank + move.relPosX;
+		int yTile = yBlank + move.relPosY;
 		// Determine whether this tile is within the bounds.
 		return xTile >= 0 && xTile < width && yTile >= 0 && yTile < height;
 	}
 	
-	public State performAction(Action action) {
+	public State performMove(Move move) {
 		State successor = new State(this);
-		successor.switchTiles(xBlank, yBlank, xBlank + action.relPosX, yBlank + action.relPosY);
-		successor.xBlank += action.relPosX;
-		successor.yBlank += action.relPosY;
+		successor.switchTiles(xBlank, yBlank, xBlank + move.relPosX, yBlank + move.relPosY);
+		successor.xBlank += move.relPosX;
+		successor.yBlank += move.relPosY;
 		successor.setPredecessor(this);
 		successor.cost = this.cost + 1;
 		return successor;
 	}
 	
-	public List<Action> determinePossibleActions() {
-		List<Action> possibleActions = new ArrayList<>(4);
-		for (Action action : Action.values()) {
-			if (isActionPossible(action)) {
-				possibleActions.add(action);
+	public List<Move> determinePossibleMoves() {
+		List<Move> possibleMoves = new ArrayList<>(4);
+		for (Move move : Move.values()) {
+			if (isMovePossible(move)) {
+				possibleMoves.add(move);
 			}
 		}
 		
-		return possibleActions;
+		return possibleMoves;
 	}
 	
+	@Override
 	public boolean isGoalState() {
 		State goalState = new State(width, height);
 		return this.equals(goalState);
-	}
-	
-	public int determineHeuristicDistance() {
-		if (heuristicDistance != null) {
-			return heuristicDistance;
-		}
-		
-		return heuristicDistance = determineManhattanDistance(new State(width, height));
 	}
 	
 	public int determineManhattanDistance(State otherState) {
@@ -166,19 +162,23 @@ public class State extends path.State implements Comparable<State> {
 	
 	@Override
 	public boolean equals(Object other) {
+		if (super.equals(other)) {
+			return true;
+		}
+		
 		if (!(other instanceof State)) {
 			// The object isn't even of the correct class.
 			return false;
 		}
 		
 		State otherState = (State) other;
-		// Only the contents of state matter; defer to the default implementation of equals for ArrayList and Integer.
-		return state.equals(otherState.state);
+		// Only the positions of the tiles matter; defer to the default implementation of equals for ArrayList and Integer.
+		return tiles.equals(otherState.tiles);
 	}
 	
 	@Override
 	public int hashCode() {
-		return state.hashCode();
+		return tiles.hashCode();
 	}
 	
 	@Override
@@ -206,6 +206,16 @@ public class State extends path.State implements Comparable<State> {
 		return result.toString();
 	}
 	
+	@Override
+	public State getPredecessor() {
+		return predecessor;
+	}
+	
+	@Override
+	public void setPredecessor(State predecessor) {
+		this.predecessor = predecessor;
+	}
+	
 	public int getWidth() {
 		return width;
 	}
@@ -223,7 +233,24 @@ public class State extends path.State implements Comparable<State> {
 	}
 	
 	@Override
-	public int compareTo(State otherState) {
-		return (this.cost + this.determineHeuristicDistance()) - (otherState.cost + otherState.determineHeuristicDistance());
+	public double getCost() {
+		return cost;
+	}
+	
+	@Override
+	public void setCost(double cost) {
+		this.cost = (int) cost;
+	}
+	
+	@Override
+	public double getHeuristicDistanceFromGoal() {
+		return heuristicDistanceFromGoal;
+	}
+	
+	@Override
+	public void determineHeuristicDistanceFromGoal(Heuristic<State> heuristic) {
+		if (heuristicDistanceFromGoal == null) {
+			heuristicDistanceFromGoal = heuristic.determineEstimatedDistanceToGoal(this);
+		}
 	}
 }
