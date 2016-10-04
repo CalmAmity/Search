@@ -1,5 +1,6 @@
 package path.route;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import util.Node;
@@ -10,13 +11,14 @@ public class Location implements Node<Location> {
 	/** The coordinates of this location. */
 	protected Point<Double> point;
 	
-	protected List<Vertex<Location>> children;
+	protected List<Vertex<Location>> connections;
 	
 	protected boolean isGoal;
 	
 	public Location(Point point) {
 		super();
 		this.point = point;
+		connections = new ArrayList<>();
 	}
 	
 	public void link(Location other, double cost) {
@@ -53,7 +55,7 @@ public class Location implements Node<Location> {
 	
 	@Override
 	public List<Vertex<Location>> getConnections() {
-		return children;
+		return connections;
 	}
 	
 	public boolean getIsGoal() {

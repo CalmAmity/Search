@@ -67,8 +67,7 @@ public class Visualiser extends Frame {
 					continue;
 				}
 				
-				drawLine(g, location.getPoint(), connection.getDestination().getPoint());
-				//TODO: also draw cost next to line
+				drawLine(g, location.getPoint(), connection.getDestination().getPoint(), String.format("%.2g%n", connection.getCost()));
 			}
 		}
 		
@@ -97,13 +96,20 @@ public class Visualiser extends Frame {
 	 * @param graphics The {@link Graphics} object used to draw shapes.
 	 * @param fromPoint The point representing the location of the first node in the graph space.
 	 * @param toPoint The point representing the location of the second node in the graph space.
+	 * @param label The label to show next to the line.
 	 */
-	protected void drawLine(Graphics graphics, Point fromPoint, Point toPoint) {
+	protected void drawLine(Graphics graphics, Point fromPoint, Point toPoint, String label) {
 		graphics.drawLine(
 				(int) ((fromPoint.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) + WIDTH_OFFSET,
 				(int) ((fromPoint.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) + HEIGHT_OFFSET,
 				(int) ((toPoint.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) + WIDTH_OFFSET,
 				(int) ((toPoint.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) + HEIGHT_OFFSET
+		);
+		
+		graphics.drawString(
+				label,
+				(int) (((fromPoint.determineCoordinate(0).doubleValue() + toPoint.determineCoordinate(0).doubleValue()) / (2 * width)) * PIXEL_WIDTH) + WIDTH_OFFSET,
+				(int) (((fromPoint.determineCoordinate(1).doubleValue() + toPoint.determineCoordinate(1).doubleValue()) / (2 * height)) * PIXEL_HEIGHT) + HEIGHT_OFFSET
 		);
 	}
 }
