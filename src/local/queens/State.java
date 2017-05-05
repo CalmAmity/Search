@@ -1,4 +1,4 @@
-package optimise.queens;
+package local.queens;
 
 import core.Heuristic;
 
