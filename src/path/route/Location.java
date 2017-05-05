@@ -15,7 +15,7 @@ public class Location implements Node<Location> {
 	
 	protected boolean isGoal;
 	
-	public Location(Point point) {
+	public Location(Point<Double> point) {
 		super();
 		this.point = point;
 		connections = new ArrayList<>();

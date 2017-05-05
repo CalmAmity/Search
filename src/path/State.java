@@ -1,7 +1,7 @@
 package path;
 
 public interface State<S extends State<S>> extends core.State<S> {
-	State getPredecessor();
+	S getPredecessor();
 	
 	void setPredecessor(S predecessor);
 	

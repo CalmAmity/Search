@@ -1,5 +1,5 @@
 package core;
 
-public interface Heuristic<State extends core.State> {
-	double determineEstimatedDistanceToGoal(State state);
+public interface Heuristic<S extends core.State<S>> {
+	double determineEstimatedDistanceToGoal(S state);
 }

@@ -10,7 +10,7 @@ public class State implements path.State<State> {
 	private Location currentLocation;
 	private double cost;
 	private Double heuristicDistanceFromGoal;
-	private path.State predecessor;
+	private State predecessor;
 	
 	public State(Location location) {
 		super();
@@ -61,7 +61,7 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public path.State getPredecessor() {
+	public State getPredecessor() {
 		return predecessor;
 	}
 	

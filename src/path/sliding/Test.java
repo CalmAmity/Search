@@ -7,7 +7,18 @@ import path.PathSearchUtil;
 
 public class Test {
 	public static void main(String[] args) {
-		testManhattanDistance();
+//		System.out.println("Executing test method testInit()");
+//		testInit();
+//		System.out.println("Executing test method testCopy()");
+//		testCopy();
+//		System.out.println("Executing test method testBFS()");
+//		testBFS();
+//		System.out.println("Executing test method testDFS()");
+//		testDFS();
+		System.out.println("Executing test method testAStar()");
+		testAStar();
+//		System.out.println("Executing test method testManhattanDistance()");
+//		testManhattanDistance();
 	}
 	
 	public static void testManhattanDistance() {
@@ -25,14 +36,14 @@ public class Test {
 	
 	public static void testAStar() {
 		State startState = new State(3, 3);
-		for (int step = 0; step < 50; step++) {
+		for (int step = 0; step < 10; step++) {
 			startState = startState.randomMove();
 		}
 		
 		// Reinitialise the start state as a copy of itself, to remove any unwanted extra information.
 		startState = new State(startState);
 		
-		AStarTree aStarTree = new AStarTree(startState, new ManhattanDistance());
+		AStarTree<State> aStarTree = new AStarTree<>(startState, new ManhattanDistance());
 		while (aStarTree.next()) {
 			
 		}
@@ -47,8 +58,8 @@ public class Test {
 		// Reinitialise the start state as a copy of itself, to remove any unwanted extra information.
 		startState = new State(startState);
 		
-		DepthFirstGraph depthFirstGraph = new DepthFirstGraph(startState);
-		path.State goalState = (path.State) depthFirstGraph.run();
+		DepthFirstGraph<State> depthFirstGraph = new DepthFirstGraph<>(startState);
+		path.State<State> goalState = (path.State<State>) depthFirstGraph.run();
 		PathSearchUtil.printPathToState(goalState);
 	}
 	
@@ -58,8 +69,8 @@ public class Test {
 			startState = startState.randomMove();
 		}
 		
-		BreadthFirstTree breadthFirstTree = new BreadthFirstTree(new State(startState));
-		path.State goalState = (path.State) breadthFirstTree.run();
+		BreadthFirstTree<State> breadthFirstTree = new BreadthFirstTree<>(new State(startState));
+		State goalState = breadthFirstTree.run();
 		PathSearchUtil.printPathToState(goalState);
 	}
 	

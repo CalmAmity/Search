@@ -83,7 +83,7 @@ public class Visualiser extends Frame {
 	 * @param graphics The {@link Graphics} object used to draw shapes.
 	 * @param point The point representing the location of the node in the graph space.
 	 */
-	protected void drawPoint(Graphics graphics, Point point) {
+	protected void drawPoint(Graphics graphics, Point<?> point) {
 		graphics.fillOval(
 				(int) ((point.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) - POINT_RADIUS + WIDTH_OFFSET,
 				(int) ((point.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) - POINT_RADIUS + HEIGHT_OFFSET,
@@ -98,7 +98,7 @@ public class Visualiser extends Frame {
 	 * @param toPoint The point representing the location of the second node in the graph space.
 	 * @param label The label to show next to the line.
 	 */
-	protected void drawLine(Graphics graphics, Point fromPoint, Point toPoint, String label) {
+	protected void drawLine(Graphics graphics, Point<?> fromPoint, Point<?> toPoint, String label) {
 		graphics.drawLine(
 				(int) ((fromPoint.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) + WIDTH_OFFSET,
 				(int) ((fromPoint.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) + HEIGHT_OFFSET,

@@ -20,7 +20,7 @@ public abstract class Point<T extends Number> {
 			throw new IllegalArgumentException("Number of dimensions does not match.");
 		}
 		
-		T result = null;
+		T result = zero();
 		for (int coordinate = 0; coordinate < determineNrDimensions(); coordinate++) {
 			// Take the absolute difference between the two coordinates (distance along this axis) and add it to the result.
 			result = sum(result, absoluteDifference(this.position.get(coordinate), otherPoint.position.get(coordinate)));
@@ -51,6 +51,9 @@ public abstract class Point<T extends Number> {
 	/** @return the absolute difference between the two parameters. */
 	protected abstract T absoluteDifference(T number1, T number2);
 	
+	/** @return an instance of {@code T} with value 0. */
+	public abstract T zero();
+
 	/** @return the number of dimensions in the space that this point is defined in. */
 	public int determineNrDimensions() {
 		return position.size();
@@ -68,12 +71,12 @@ public abstract class Point<T extends Number> {
 			return true;
 		}
 		
-		if (!(otherObject instanceof Point)) {
+		if (!(otherObject instanceof Point<?>)) {
 			// The argument is not an instance of Point.
 			return false;
 		}
 		
-		Point otherPoint = (Point) otherObject;
+		Point<?> otherPoint = (Point<?>) otherObject;
 		if (determineNrDimensions() != otherPoint.determineNrDimensions()) {
 			// The points have a different number of coordinates, meaning they are not even part of the same space.
 			return false;
@@ -104,6 +107,11 @@ public abstract class Point<T extends Number> {
 		protected Integer absoluteDifference(Integer number1, Integer number2) {
 			return Math.abs(number1 - number2);
 		}
+
+		@Override
+		public Integer zero() {
+			return Integer.valueOf(0);
+		}
 	}
 	
 	public static class DoublePoint extends Point<Double> {
@@ -129,6 +137,11 @@ public abstract class Point<T extends Number> {
 		 */
 		public static DoublePoint createRandom2D(double xMax, double yMax) {
 			return new DoublePoint(Math.random() * xMax, Math.random() * yMax);
+		}
+
+		@Override
+		public Double zero() {
+			return Double.valueOf(0);
 		}
 	}
 }

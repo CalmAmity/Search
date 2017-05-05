@@ -3,9 +3,9 @@ package path;
 import java.util.Stack;
 
 public class PathSearchUtil {
-	public static void printPathToState(path.State state) {
-		path.State currentState = state;
-		Stack<path.State> goalPath = new Stack<>();
+	public static void printPathToState(path.State<?> state) {
+		path.State<?> currentState = state;
+		Stack<path.State<?>> goalPath = new Stack<>();
 		goalPath.push(currentState);
 		while (currentState != null) {
 			goalPath.push(currentState);
