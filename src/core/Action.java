@@ -9,6 +9,11 @@ public class Action<S extends State<S>> {
 		this.cost = cost;
 	}
 	
+	@Override
+	public String toString() {
+		return "Resulting state:\n" + resultingState + "\nCost: " + cost;
+	}
+	
 	public S getResultingState() {
 		return resultingState;
 	}

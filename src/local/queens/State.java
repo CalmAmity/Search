@@ -1,5 +1,9 @@
 package local.queens;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import core.Action;
 import core.Heuristic;
 
 public class State implements core.State<State> {
@@ -61,6 +65,24 @@ public class State implements core.State<State> {
 		//   - the vertical distance is equal to the horizontal distance (which means that the queens are clashing diagonally).
 		// Thanks to the data structure, this method does not need to check for vertical clashing.
 		return verticalDistance == 0 || horizontalDistance == verticalDistance;
+	}
+	
+	@Override
+	public Collection<Action<State>> determineAvailableActions() {
+		Collection<Action<State>> availableActions = new ArrayList<>();
+		
+		for (int column = 0; column < board.length; column++) {
+			for (int row = 0; row < board.length; row++) {
+				// Move the queen in the current column to the current row. If this results in a different board configuration, create a new action for it and add it to the list.
+				if (board[column] != row) {
+					int[] successorBoard = board.clone();
+					successorBoard[column] = row;
+					availableActions.add(new Action<State>(new State(successorBoard), 0));
+				}
+			}
+		}
+		
+		return availableActions;
 	}
 
 	@Override
