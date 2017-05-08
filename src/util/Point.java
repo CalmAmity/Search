@@ -3,8 +3,10 @@ package util;
 import java.util.Arrays;
 import java.util.List;
 
+/** Represents a point in n-dimensional space. */
 public abstract class Point<T extends Number> {
-	List<T> position;
+	/** A list of coordinates that together represent the location of this point. */
+	private List<T> position;
 	
 	@SafeVarargs
 	public Point(T... coordinates) {
@@ -30,7 +32,7 @@ public abstract class Point<T extends Number> {
 		return result;
 	}
 	
-	/** Calculates the euclidean distance between this and another point. */
+	/** Calculates the Euclidean distance between this and another point. */
 	public double euclideanDistanceTo(Point<T> otherPoint) {
 		if (this.determineNrDimensions() != otherPoint.determineNrDimensions()) {
 			throw new IllegalArgumentException("Number of dimensions does not match.");

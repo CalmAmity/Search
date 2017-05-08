@@ -7,17 +7,23 @@ import java.util.stream.Collectors;
 
 import path.State;
 
+/** Implements a graph-based form of the depth-first search algorithm. */
 public class DepthFirstGraph<S extends State<S>> {
+	/** A collection of all nodes that have not yet been expanded. */
 	private Stack<S> frontier;
+	/** The states that have already been explored; if encountered again, states in this set will not be expanded a second time. */
 	private Set<S> explored;
 	
 	public DepthFirstGraph(S startState) {
 		frontier = new Stack<>();
 		frontier.push(startState);
-		
 		explored = new HashSet<>();
 	}
 	
+	/**
+	 * Runs the algorithm to completion.
+	 * @return the goal state found by the algorithm.
+	 */
 	public S run() {
 		S currentState;
 		do {

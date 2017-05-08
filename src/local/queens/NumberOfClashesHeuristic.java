@@ -2,6 +2,7 @@ package local.queens;
 
 import core.Heuristic;
 
+/** Implements the heuristic function that checks the number of pairs of queens that threaten each other. */
 public class NumberOfClashesHeuristic extends Heuristic<State> {
 	@Override
 	protected double estimateDistanceToGoal(State state) {

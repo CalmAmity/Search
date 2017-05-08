@@ -181,11 +181,6 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-	
-	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		for (int row = 0; row < height; row++) {
@@ -244,5 +239,10 @@ public class State implements path.State<State> {
 	@Override
 	public Double getHeuristicDistanceFromGoal() {
 		return heuristicDistanceFromGoal;
+	}
+	
+	@Override
+	public void setHeuristicDistanceFromGoal(Double distance) {
+		heuristicDistanceFromGoal = distance;
 	}
 }

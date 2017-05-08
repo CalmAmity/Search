@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import core.Action;
 
+/** Represents a single state in the 8 Queens Problem (generalised to the X Queens Problem). */
 public class State implements core.State<State> {
 	/** Represents the chess board. Every position in the array corresponds to a column on the board, and the integer in that position indicates the row the queen is in. */
 	private int[] board;
@@ -83,14 +84,43 @@ public class State implements core.State<State> {
 		
 		return availableActions;
 	}
-
+	
 	@Override
-	public Double getHeuristicDistanceFromGoal() {
-		return heuristicDistanceFromGoal;
+	public boolean equals(Object otherObject) {
+		if (super.equals(otherObject)) {
+			// This is the same state object.
+			return true;
+		}
+		
+		if (!(otherObject instanceof State)) {
+			// The other object is not of the same class.
+			return false;
+		}
+		
+		State otherState = (State) otherObject;
+		if (this.determineDimensions() != otherState.determineDimensions()) {
+			// The other state uses different board dimensions.
+			return false;
+		}
+		
+		for (int column = 0; column < board.length; column++) {
+			if (this.board[column] != otherState.board[column]) {
+				// The queen in the current column is in different positions.
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	@Override
 	public String toString() {
+		// Prints the board [0,2,1] as follows:
+		// [()    ]
+		// [    ()]
+		// [  ()  ]
+		// This is done to give a close-to-square image of the board, for easier viewing.
+		
 		String result = "";
 		for (int row = 0; row < board.length; row++) {
 			result += "[";
@@ -109,7 +139,18 @@ public class State implements core.State<State> {
 		return result;
 	}
 	
+	/** @return The length of one side of the board. Because a board in this problem is always square, this length describes the size in both dimensions. */
 	public int determineDimensions() {
 		return board.length;
+	}
+
+	@Override
+	public Double getHeuristicDistanceFromGoal() {
+		return heuristicDistanceFromGoal;
+	}
+	
+	@Override
+	public void setHeuristicDistanceFromGoal(Double distance) {
+		heuristicDistanceFromGoal = distance;
 	}
 }

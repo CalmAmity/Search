@@ -5,10 +5,15 @@ import java.util.stream.Collectors;
 
 import core.Action;
 
+/** Represents a state in the route search problem. */
 public class State implements path.State<State> {
+	/** The location represented by this state. */
 	private Location currentLocation;
+	/** The cost of reaching this state from the starting state. */
 	private double cost;
+	/** The distance between this state and the goal state, as estimated by a heuristic function. */
 	private Double heuristicDistanceFromGoal;
+	/** The state that preceded this one in the route currently being explored. */
 	private State predecessor;
 	
 	public State(Location location) {
@@ -28,24 +33,30 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public Double getHeuristicDistanceFromGoal() {
-		return heuristicDistanceFromGoal;
-	}
-	
-	@Override
 	public boolean equals(Object other) {
 		if (super.equals(other)) {
+			// This is the same state object.
 			return true;
 		}
 		
 		if (!(other instanceof State)) {
-			// The object isn't even of the correct class.
+			// The other object is not of the same class.
 			return false;
 		}
 		
 		State otherState = (State) other;
 		// Only the location matters; defer to the default implementation of equals for Location.
 		return currentLocation.equals(otherState.getCurrentLocation());
+	}
+	
+	@Override
+	public Double getHeuristicDistanceFromGoal() {
+		return heuristicDistanceFromGoal;
+	}
+	
+	@Override
+	public void setHeuristicDistanceFromGoal(Double distance) {
+		heuristicDistanceFromGoal = distance;
 	}
 	
 	public Location getCurrentLocation() {

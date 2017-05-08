@@ -44,7 +44,7 @@ public class Test {
 		startState = new State(startState);
 		
 		AStarTree<State> aStarTree = new AStarTree<>(startState, new ManhattanDistance());
-		while (aStarTree.next()) {
+		while (aStarTree.performStep()) {
 			
 		}
 	}

@@ -7,12 +7,13 @@ import util.Node;
 import util.Point;
 import util.Vertex;
 
+/** Represents a location in the route search problem. */
 public class Location implements Node<Location> {
 	/** The coordinates of this location. */
 	protected Point<Double> point;
-	
+	/** The list of all connections this location has to others. */
 	protected List<Vertex<Location>> connections;
-	
+	/** Indicates whether this location is the goal of the search. */
 	protected boolean isGoal;
 	
 	public Location(Point<Double> point) {
@@ -21,10 +22,16 @@ public class Location implements Node<Location> {
 		connections = new ArrayList<>();
 	}
 	
+	/**
+	 * Creates a connection from this location to the provided location. This connection is symmetrical.
+	 * @param other The location to link this one to.
+	 * @param cost The cost of moving between the locations once.
+	 */
 	public void link(Location other, double cost) {
+		// Create the connection.
 		Vertex<Location> newConnection = new Vertex<>(this, other, cost);
-		
 		if (this.getConnections().contains(newConnection)) {
+			// This connection already exists. Do nothing.
 			return;
 		}
 		
@@ -36,11 +43,12 @@ public class Location implements Node<Location> {
 	@Override
 	public boolean equals(Object other) {
 		if (super.equals(other)) {
+			// This is the same location object.
 			return true;
 		}
 		
 		if (!(other instanceof Location)) {
-			// The object isn't even of the correct class.
+			// The other object is not of the same class.
 			return false;
 		}
 		

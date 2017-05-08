@@ -6,14 +6,20 @@ import java.util.stream.Collectors;
 
 import path.State;
 
+/** Implements a simple form of the tree-based breadth-first search algorithm. */
 public class BreadthFirstTree<S extends State<S>> {
-	Queue<S> frontier;
+	/** A collection of all nodes that have not yet been expanded. */
+	private Queue<S> frontier;
 	
 	public BreadthFirstTree(S startState) {
 		frontier = new ArrayDeque<>();
 		frontier.add(startState);
 	}
 	
+	/**
+	 * Runs the algorithm to completion.
+	 * @return the goal state found by the algorithm.
+	 */
 	public S run() {
 		S currentState;
 		do {

@@ -12,9 +12,7 @@ import java.util.Set;
 import util.Point;
 import util.Vertex;
 
-/**
- * Visualises a graph by drawing both the nodes and the connections between them in a frame representing the graph space.
- */
+/** Visualises a graph by drawing both the nodes and the connections between them in a frame representing the graph space. */
 public class Visualiser extends Frame {
 	/** The functional width of this frame in pixels. */
 	public static final int PIXEL_WIDTH = 500;
