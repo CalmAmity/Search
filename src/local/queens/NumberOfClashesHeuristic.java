@@ -2,9 +2,9 @@ package local.queens;
 
 import core.Heuristic;
 
-public class NumberOfClashesHeuristic implements Heuristic<State> {
+public class NumberOfClashesHeuristic extends Heuristic<State> {
 	@Override
-	public double determineEstimatedDistanceToGoal(State state) {
+	protected double estimateDistanceToGoal(State state) {
 		double numberOfClashes = 0;
 		// Loop over the columns on the board. 
 		for (int columnBeingChecked = 0; columnBeingChecked < state.determineDimensions(); columnBeingChecked++) {

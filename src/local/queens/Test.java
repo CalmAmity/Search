@@ -16,7 +16,7 @@ public class Test {
 		SteepestAscent<State> climb = new SteepestAscent<State>(state, heuristic);
 		while(state != null) {
 			System.out.println(state);
-			state.determineHeuristicDistanceFromGoal(heuristic);
+			heuristic.determineEstimatedDistanceToGoal(state);
 			System.out.println("Distance: " + state.getHeuristicDistanceFromGoal());
 			System.out.println("==========");
 			state = climb.performStep();
@@ -45,20 +45,20 @@ public class Test {
 		for (int testIteration = 0; testIteration < 10; testIteration++) {
 			// Create an 8x8 state at random and determine its distance.
 			State state = new State(8);
-			state.determineHeuristicDistanceFromGoal(heuristic);
+			heuristic.determineEstimatedDistanceToGoal(state);
 			System.out.println(state);
 			System.out.println("Heuristic distance from goal: " + state.getHeuristicDistanceFromGoal());
 		}
 		
 		// Create a specific non-goal state (11 clashes) and determine its distance.
 		State state = new State(new int[]{1,2,5,4,0,6,4,4});
-		state.determineHeuristicDistanceFromGoal(heuristic);
+		heuristic.determineEstimatedDistanceToGoal(state);
 		System.out.println(state);
 		System.out.println("Heuristic distance from goal: " + state.getHeuristicDistanceFromGoal());
 		
 		// Create a goal state and determine its distance.
 		state = new State(new int[]{4, 2, 0, 6, 1, 7, 5, 3});
-		state.determineHeuristicDistanceFromGoal(heuristic);
+		heuristic.determineEstimatedDistanceToGoal(state);
 		System.out.println(state);
 		System.out.println("Heuristic distance from goal: " + state.getHeuristicDistanceFromGoal());
 	}

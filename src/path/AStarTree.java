@@ -26,7 +26,7 @@ public class AStarTree<S extends State<S>> {
 				}
 		);
 		
-		startState.determineHeuristicDistanceFromGoal(heuristic);
+		heuristic.determineEstimatedDistanceToGoal(startState);
 		frontier.add(startState);
 	}
 	
@@ -43,7 +43,7 @@ public class AStarTree<S extends State<S>> {
 		for (Action<S> action : availableActions) {
 			S resultingState = action.getResultingState();
 			resultingState.setCost(action.getCost());
-			resultingState.determineHeuristicDistanceFromGoal(heuristic);
+			heuristic.determineEstimatedDistanceToGoal(resultingState);
 			frontier.add(resultingState);
 		}
 		

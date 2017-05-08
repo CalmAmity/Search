@@ -6,6 +6,7 @@ import java.util.List;
 public abstract class Point<T extends Number> {
 	List<T> position;
 	
+	@SafeVarargs
 	public Point(T... coordinates) {
 		if (coordinates.length == 0) {
 			throw new IllegalArgumentException("At least one coordinate should be specified.");

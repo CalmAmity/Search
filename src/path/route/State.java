@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import core.Action;
-import core.Heuristic;
 
 public class State implements path.State<State> {
 	private Location currentLocation;
@@ -29,15 +28,8 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public double getHeuristicDistanceFromGoal() {
+	public Double getHeuristicDistanceFromGoal() {
 		return heuristicDistanceFromGoal;
-	}
-	
-	@Override
-	public void determineHeuristicDistanceFromGoal(Heuristic<State> heuristic) {
-		if (heuristicDistanceFromGoal == null) {
-			heuristicDistanceFromGoal = heuristic.determineEstimatedDistanceToGoal(this);
-		}
 	}
 	
 	@Override

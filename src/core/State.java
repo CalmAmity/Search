@@ -5,9 +5,7 @@ import java.util.Collection;
 public interface State<S extends State<S>> {
 	boolean isGoalState();
 	
-	double getHeuristicDistanceFromGoal();
-	
-	void determineHeuristicDistanceFromGoal(Heuristic<S> heuristic);
+	Double getHeuristicDistanceFromGoal();
 	
 	Collection<Action<S>> determineAvailableActions();
 }

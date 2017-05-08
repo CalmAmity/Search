@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import core.Action;
-import core.Heuristic;
 
 public class State implements core.State<State> {
 	/** Represents the chess board. Every position in the array corresponds to a column on the board, and the integer in that position indicates the row the queen is in. */
@@ -86,17 +85,10 @@ public class State implements core.State<State> {
 	}
 
 	@Override
-	public double getHeuristicDistanceFromGoal() {
+	public Double getHeuristicDistanceFromGoal() {
 		return heuristicDistanceFromGoal;
 	}
 
-	@Override
-	public void determineHeuristicDistanceFromGoal(Heuristic<State> heuristic) {
-		if (heuristicDistanceFromGoal == null) {
-			heuristicDistanceFromGoal = heuristic.determineEstimatedDistanceToGoal(this);
-		}
-	}
-	
 	@Override
 	public String toString() {
 		String result = "";
