@@ -20,4 +20,10 @@ public class NumberOfClashesHeuristic extends Heuristic<State> {
 		
 		return numberOfClashes;
 	}
+	
+	@Override
+	public double getBestPossibleScore() {
+		// The best possible score is zero clashes.
+		return 0;
+	}
 }

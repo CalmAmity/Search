@@ -1,6 +1,7 @@
 package local.hillclimbing;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import core.Heuristic;
@@ -12,6 +13,10 @@ public class SteepestAscent<S extends State<S>> {
 	private S currentState;
 	/** The heuristic used to judge the quality of states. */
 	private Heuristic<S> heuristic;
+	/** The maximum number of consecutive moves the algorithm is allowed to make among states with the same quality. */
+	private int maximumNrPlateauMoves;
+	/** The number of consecutive moves the algorithm has currently made without finding a state of higher quality. */
+	private int currentNrPlateauMoves;
 	
 	/**
 	 * Constructs a new state object.
@@ -23,17 +28,29 @@ public class SteepestAscent<S extends State<S>> {
 		this.heuristic = heuristic;
 	}
 	
+	public SteepestAscent(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
+		this(startState, heuristic);
+		this.maximumNrPlateauMoves = maximumNrPlateauMoves;
+	}
+	
 	/**
 	 * Performs a single step in the algorithm, by generating all possible successor states and moving to the best one.
 	 * @return The new best state, or {@code null} if no successor state is better than {@code #currentState}.
 	 */
 	public S performStep() {
+		if (currentState.getHeuristicDistanceFromGoal() == heuristic.getBestPossibleScore()) {
+			// The current state has the best score it is possible to achieve using the current heuristic. Stop the search.
+			return null;
+		} 
+		
 		// Determine the quality of the current state.
 		double currentDistance = heuristic.determineEstimatedDistanceToGoal(currentState);
-		// Create the complete set of possible successor states.
-		Collection<S> successorStates = currentState.determineAvailableActions().stream().map(action -> action.getResultingState()).collect(Collectors.toSet());
+		// Create a complete list of possible successor states.
+		List<S> successorStates = currentState.determineAvailableActions().stream().map(action -> action.getResultingState()).collect(Collectors.toList());
+		// Randomise the order of the list in order to prevent walking in tiny circles around a plateau.
+		Collections.shuffle(successorStates);
 		for (S successorState : successorStates) {
-			if (heuristic.determineEstimatedDistanceToGoal(successorState) < currentState.getHeuristicDistanceFromGoal()) {
+			if (heuristic.determineEstimatedDistanceToGoal(successorState) <= currentState.getHeuristicDistanceFromGoal()) {
 				// This successor state is of a higher quality than the current state. Make this the new current state.
 				currentState = successorState;
 			}
@@ -41,6 +58,13 @@ public class SteepestAscent<S extends State<S>> {
 		
 		if (currentDistance > currentState.getHeuristicDistanceFromGoal()) {
 			// The newly found current state is of a higher quality than the state that was current at the start of this step. Return this new current state.
+			currentNrPlateauMoves = 0;
+			return currentState;
+		} else if (currentDistance == currentState.getHeuristicDistanceFromGoal()
+				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
+			// The newly found current state is of the same quality as the state that was current at the start of this step. However, the maximum number of moves among same-quality
+			// states has not yet been exceeded, so keep going.
+			currentNrPlateauMoves++;
 			return currentState;
 		} else {
 			// No state could be found that is of a higher quality than the state that was current at the start of this step. Return null to signify this.

@@ -20,4 +20,10 @@ public class ManhattanDistance extends Heuristic<State> {
 		}
 		return totalDistance;
 	}
+	
+	@Override
+	public double getBestPossibleScore() {
+		// The best possible score is a distance of zero.
+		return 0;
+	}
 }

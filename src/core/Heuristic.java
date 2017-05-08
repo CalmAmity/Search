@@ -24,4 +24,7 @@ public abstract class Heuristic<S extends core.State<S>> {
 	 * @return The distance of the provided state from the goal, as determined by the heuristic function.
 	 */
 	protected abstract double estimateDistanceToGoal(S state);
+	
+	/** @return the best possible score a state can achieve with this heuristic. A state with this score can be regarded as a goal state. */
+	public abstract double getBestPossibleScore();
 }

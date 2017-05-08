@@ -13,7 +13,7 @@ public class Test {
 	public static void testSteepestAscent() {
 		State state = new State(8);
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
-		SteepestAscent<State> climb = new SteepestAscent<State>(state, heuristic);
+		SteepestAscent<State> climb = new SteepestAscent<State>(state, heuristic, 100);
 		while(state != null) {
 			System.out.println(state);
 			heuristic.determineEstimatedDistanceToGoal(state);
