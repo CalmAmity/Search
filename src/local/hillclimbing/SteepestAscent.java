@@ -38,7 +38,7 @@ public class SteepestAscent<S extends State<S>> {
 	 * @return The new best state, or {@code null} if no successor state is better than {@code #currentState}.
 	 */
 	public S performStep() {
-		if (currentState.getHeuristicDistanceFromGoal() == heuristic.getBestPossibleScore()) {
+		if (heuristic.determineEstimatedDistanceToGoal(currentState) == heuristic.getBestPossibleScore()) {
 			// The current state has the best score it is possible to achieve using the current heuristic. Stop the search.
 			return null;
 		} 
@@ -67,7 +67,7 @@ public class SteepestAscent<S extends State<S>> {
 			currentNrPlateauMoves++;
 			return currentState;
 		} else {
-			// No state could be found that is of a higher quality than the state that was current at the start of this step. Return null to signify this.
+			// All states adjacent to the current one are of lower quality. Return null to signify this.
 			return null;
 		}
 	}

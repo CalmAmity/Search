@@ -3,11 +3,20 @@ package local.queens;
 import java.util.Arrays;
 
 import core.Heuristic;
+import local.hillclimbing.RandomRestart;
 import local.hillclimbing.SteepestAscent;
 
 public class Test {
 	public static void main(String[] args) {
-		testSteepestAscent();
+		testRandomRestart();
+	}
+	
+	public static void testRandomRestart() {
+		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
+		RandomRestart<State> search = new RandomRestart<>(heuristic);
+		State result = search.run(() -> new State(8));
+		System.out.println(result);
+		System.out.println("Distance: " + result.getHeuristicDistanceFromGoal());
 	}
 	
 	public static void testSteepestAscent() {
