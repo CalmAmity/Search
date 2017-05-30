@@ -6,7 +6,7 @@ public class Vertex<N extends Node<N>> {
 	private N origin;
 	/** The destination node. */
 	private N destination;
-	/** The cost of moving from {@link #origin} to {@link destination}. */
+	/** The cost of moving from {@link #origin} to {@link #destination}. */
 	private double cost;
 	
 	public Vertex(N origin, N destination, double cost) {

@@ -87,7 +87,7 @@ public abstract class Point<T extends Number> {
 		
 		// Check every coordinate.
 		for (int dimension = 0; dimension < this.position.size(); dimension++) {
-			if (!this.determineCoordinate(dimension).equals(otherPoint.determineCoordinate(dimension))) {
+			if (!Util.equalValue(this.determineCoordinate(dimension).doubleValue(), otherPoint.determineCoordinate(dimension).doubleValue())) {
 				// The coordinates for the current dimension differ between the two points.
 				return false;
 			}
@@ -118,7 +118,7 @@ public abstract class Point<T extends Number> {
 
 		@Override
 		public Integer zero() {
-			return Integer.valueOf(0);
+			return 0;
 		}
 	}
 	
@@ -146,10 +146,10 @@ public abstract class Point<T extends Number> {
 		public static DoublePoint createRandom2D(double xMax, double yMax) {
 			return new DoublePoint(Math.random() * xMax, Math.random() * yMax);
 		}
-
+		
 		@Override
 		public Double zero() {
-			return Double.valueOf(0);
+			return 0d;
 		}
 	}
 }
