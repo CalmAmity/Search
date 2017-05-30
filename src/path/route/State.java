@@ -1,9 +1,9 @@
 package path.route;
 
+import core.Action;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
-
-import core.Action;
 
 /** Represents a state in the route search problem. */
 public class State implements path.State<State> {
@@ -47,6 +47,11 @@ public class State implements path.State<State> {
 		State otherState = (State) other;
 		// Only the location matters; defer to the default implementation of equals for Location.
 		return currentLocation.equals(otherState.getCurrentLocation());
+	}
+	
+	@Override
+	public int hashCode() {
+		return currentLocation.hashCode();
 	}
 	
 	@Override

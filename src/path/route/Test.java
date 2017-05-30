@@ -1,9 +1,10 @@
 package path.route;
 
+import util.Point;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import util.Point;
+import java.util.Random;
 
 public class Test {
 	public static void main(String[] args) {
@@ -17,10 +18,11 @@ public class Test {
 			locations.add(location);
 		}
 		
+		Random rng = new Random();
 		for (Location location : locations) {
 			while ((double) location.getConnections().size() / 5 < Math.random()) {
 				// Time to create a new link between this node and a random other node.
-				int otherLocationIndex = (int) ((double) locations.size() * Math.random());
+				int otherLocationIndex = rng.nextInt(locations.size());
 				
 				// Determine the actual distance between the two locations.
 				double actualDistance = location.point.euclideanDistanceTo(locations.get(otherLocationIndex).point);

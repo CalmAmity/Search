@@ -59,7 +59,7 @@ public class Test {
 		startState = new State(startState);
 		
 		DepthFirstGraph<State> depthFirstGraph = new DepthFirstGraph<>(startState);
-		path.State<State> goalState = (path.State<State>) depthFirstGraph.run();
+		path.State<State> goalState = depthFirstGraph.run();
 		PathSearchUtil.printPathToState(goalState);
 	}
 	

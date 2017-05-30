@@ -1,12 +1,13 @@
 package path.sliding;
 
+import core.Action;
+import util.Point;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
-
-import core.Action;
-import util.Point;
 
 public class State implements path.State<State> {
 	private State predecessor;
@@ -19,10 +20,6 @@ public class State implements path.State<State> {
 	private Double heuristicDistanceFromGoal;
 	
 	public State(int width, int height) {
-		this(width, height, false);
-	}
-	
-	public State(int width, int height, boolean determineHeuristicDistance) {
 		this.width = width;
 		this.height = height;
 		
@@ -59,7 +56,7 @@ public class State implements path.State<State> {
 	public State randomMove() {
 		// Decide (at random) in which direction to slide.
 		List<Move> possibleMoves = determinePossibleMoves();
-		Move move = possibleMoves.get((int) (Math.random() * possibleMoves.size()));
+		Move move = possibleMoves.get(new Random().nextInt(possibleMoves.size()));
 		return performMove(move);
 	}
 	

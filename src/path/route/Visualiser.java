@@ -1,16 +1,14 @@
 package path.route;
 
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.Graphics;
+import util.Point;
+import util.Vertex;
+
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import util.Point;
-import util.Vertex;
 
 /** Visualises a graph by drawing both the nodes and the connections between them in a frame representing the graph space. */
 public class Visualiser extends Frame {
@@ -26,27 +24,28 @@ public class Visualiser extends Frame {
 	public static final int HEIGHT_OFFSET = 30;
 	
 	/** The width of the graph space, in the same units as used in the elements of {@link #locations}. */
-	private int width;
+	private int widthInGraphUnits;
 	/** The height of the graph space, in the same units as used in the elements of {@link #locations}. */
-	private int height;
+	private int heightInGraphUnits;
 	/** A list of nodes in the graph, containing references to the connected nodes. */
 	private List<? extends Location> locations;
 	
 	/**
 	 * Initialises the visualiser.
-	 * @param width The width of the graph space, in the same units as used in the elements of {@link #locations}.
-	 * @param height The height of the graph space, in the same units as used in the elements of {@link #locations}.
+	 * @param widthInGraphUnits The widthInGraphUnits of the graph space, in the same units as used in the elements of {@link #locations}.
+	 * @param heightInGraphUnits The height of the graph space, in the same units as used in the elements of {@link #locations}.
 	 * @param locations A list of nodes in the graph, containing references to the connected nodes.
 	 */
-	public Visualiser(int width, int height, List<Location> locations) {
+	public Visualiser(int widthInGraphUnits, int heightInGraphUnits, List<Location> locations) {
 		super("Graph");
-		this.width = width;
-		this.height = height;
+		this.widthInGraphUnits = widthInGraphUnits;
+		this.heightInGraphUnits = heightInGraphUnits;
 		this.locations = locations;
 		// Set the window size to the functional size plus the offset created by Windows frames.
 		setSize(PIXEL_WIDTH + WIDTH_OFFSET + WIDTH_OFFSET, PIXEL_HEIGHT + HEIGHT_OFFSET + 8);
 		// Close the application when closing the window.
 		addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent windowEvent) {
 				System.exit(0);
 			}
@@ -83,8 +82,8 @@ public class Visualiser extends Frame {
 	 */
 	protected void drawPoint(Graphics graphics, Point<?> point) {
 		graphics.fillOval(
-				(int) ((point.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) - POINT_RADIUS + WIDTH_OFFSET,
-				(int) ((point.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) - POINT_RADIUS + HEIGHT_OFFSET,
+				(int) ((point.determineCoordinate(0).doubleValue() / widthInGraphUnits) * PIXEL_WIDTH) - POINT_RADIUS + WIDTH_OFFSET,
+				(int) ((point.determineCoordinate(1).doubleValue() / heightInGraphUnits) * PIXEL_HEIGHT) - POINT_RADIUS + HEIGHT_OFFSET,
 				POINT_RADIUS * 2, POINT_RADIUS * 2
 		);
 	}
@@ -98,16 +97,18 @@ public class Visualiser extends Frame {
 	 */
 	protected void drawLine(Graphics graphics, Point<?> fromPoint, Point<?> toPoint, String label) {
 		graphics.drawLine(
-				(int) ((fromPoint.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) + WIDTH_OFFSET,
-				(int) ((fromPoint.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) + HEIGHT_OFFSET,
-				(int) ((toPoint.determineCoordinate(0).doubleValue() / width) * PIXEL_WIDTH) + WIDTH_OFFSET,
-				(int) ((toPoint.determineCoordinate(1).doubleValue() / height) * PIXEL_HEIGHT) + HEIGHT_OFFSET
+				(int) ((fromPoint.determineCoordinate(0).doubleValue() / widthInGraphUnits) * PIXEL_WIDTH) + WIDTH_OFFSET,
+				(int) ((fromPoint.determineCoordinate(1).doubleValue() / heightInGraphUnits) * PIXEL_HEIGHT) + HEIGHT_OFFSET,
+				(int) ((toPoint.determineCoordinate(0).doubleValue() / widthInGraphUnits) * PIXEL_WIDTH) + WIDTH_OFFSET,
+				(int) ((toPoint.determineCoordinate(1).doubleValue() / heightInGraphUnits) * PIXEL_HEIGHT) + HEIGHT_OFFSET
 		);
 		
 		graphics.drawString(
 				label,
-				(int) (((fromPoint.determineCoordinate(0).doubleValue() + toPoint.determineCoordinate(0).doubleValue()) / (2 * width)) * PIXEL_WIDTH) + WIDTH_OFFSET,
-				(int) (((fromPoint.determineCoordinate(1).doubleValue() + toPoint.determineCoordinate(1).doubleValue()) / (2 * height)) * PIXEL_HEIGHT) + HEIGHT_OFFSET
+				(int) (((fromPoint.determineCoordinate(0).doubleValue() + toPoint.determineCoordinate(0).doubleValue())
+						/ (2 * widthInGraphUnits)) * PIXEL_WIDTH) + WIDTH_OFFSET,
+				(int) (((fromPoint.determineCoordinate(1).doubleValue() + toPoint.determineCoordinate(1).doubleValue())
+						/ (2 * heightInGraphUnits)) * PIXEL_HEIGHT) + HEIGHT_OFFSET
 		);
 	}
 }

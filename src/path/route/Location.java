@@ -1,11 +1,11 @@
 package path.route;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import util.Node;
 import util.Point;
 import util.Vertex;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Represents a location in the route search problem. */
 public class Location implements Node<Location> {
@@ -55,6 +55,11 @@ public class Location implements Node<Location> {
 		Location otherLocation = (Location) other;
 		// Defer to the default implementation of equals for Point.
 		return point.equals(otherLocation.getPoint());
+	}
+	
+	@Override
+	public int hashCode() {
+		return point.hashCode();
 	}
 	
 	public Point<Double> getPoint() {

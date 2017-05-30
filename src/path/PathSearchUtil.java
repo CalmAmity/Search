@@ -1,20 +1,22 @@
 package path;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /** Utility class that provides support methods for path search algorithms. */
 public final class PathSearchUtil {
 	// This class is not meant to be instantiated.
-	private PathSearchUtil() {};
+	private PathSearchUtil() {
+	}
 	
 	/**
 	 * Takes a state for a path search algorithm and prints the path from the start state to that state to the console. The path is determined using {@link State#getPredecessor()}.
-	 * @param state
+	 * @param state The state at the end of the path to print.
 	 */
 	public static void printPathToState(path.State<?> state) {
 		// Create a stack to represent the path to this state and push the state itself onto it.
 		path.State<?> currentState = state;
-		Stack<path.State<?>> goalPath = new Stack<>();
+		Deque<State<?>> goalPath = new ArrayDeque<>();
 		goalPath.push(currentState);
 		
 		// Moving from a predecessor to its predecessor, push all states onto the stack, ending with the starting state. 

@@ -1,9 +1,11 @@
 package local.queens;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import core.Action;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
 
 /** Represents a single state in the 8 Queens Problem (generalised to the X Queens Problem). */
 public class State implements core.State<State> {
@@ -18,9 +20,10 @@ public class State implements core.State<State> {
 	 */
 	public State(int dimensions) {
 		board = new int[dimensions];
+		Random rng = new Random();
 		for (int column = 0; column < dimensions; column++) {
 			// Place the queen for this column in a randomly selected row.
-			board[column] = (int) (Math.random() * dimensions);
+			board[column] = rng.nextInt(dimensions);
 		}
 	}
 	
@@ -112,7 +115,12 @@ public class State implements core.State<State> {
 		
 		return true;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(board);
+	}
+	
 	@Override
 	public String toString() {
 		// Prints the board [0,2,1] as follows:
@@ -121,22 +129,22 @@ public class State implements core.State<State> {
 		// [  ()  ]
 		// This is done to give a close-to-square image of the board, for easier viewing.
 		
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int row = 0; row < board.length; row++) {
-			result += "[";
+			result.append("[");
 			
-			for (int column = 0; column < board.length; column++) {
-				result += board[column] == row ? "()" : "  ";
+			for (int column : board) {
+				result.append(column == row ? "()" : "  ");
 			}
 			
-			result += "]";
+			result.append("]");
 			
 			if (row < board.length - 1) {
-				result += "\n";
+				result.append("\n");
 			}
 		}
 		
-		return result;
+		return result.toString();
 	}
 	
 	/** @return The length of one side of the board. Because a board in this problem is always square, this length describes the size in both dimensions. */

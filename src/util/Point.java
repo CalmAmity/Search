@@ -45,7 +45,7 @@ public abstract class Point<T extends Number> {
 		}
 		
 		// Take the nth root of the result, where n is the number of dimensions.
-		return Math.pow(result, 1 / determineNrDimensions());
+		return Math.pow(result, 1d / determineNrDimensions());
 	}
 	
 	/** @return the sum of the two parameters. */
@@ -94,6 +94,11 @@ public abstract class Point<T extends Number> {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		return position.hashCode();
 	}
 	
 	public static class IntegerPoint extends Point<Integer> {

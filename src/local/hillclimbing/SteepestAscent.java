@@ -1,11 +1,13 @@
 package local.hillclimbing;
 
+import core.Action;
+import core.Heuristic;
+import core.State;
+import util.Util;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import core.Heuristic;
-import core.State;
 
 /** Implements a simple form of the steepest ascent hill-climbing algorithm. */
 public class SteepestAscent<S extends State<S>> {
@@ -38,7 +40,7 @@ public class SteepestAscent<S extends State<S>> {
 	 * @return The new best state, or {@code null} if no successor state is better than {@code #currentState}.
 	 */
 	public S performStep() {
-		if (heuristic.determineEstimatedDistanceToGoal(currentState) == heuristic.getBestPossibleScore()) {
+		if (Util.equalValue(heuristic.determineEstimatedDistanceToGoal(currentState), heuristic.getBestPossibleScore())) {
 			// The current state has the best score it is possible to achieve using the current heuristic. Stop the search.
 			return null;
 		} 
@@ -46,7 +48,7 @@ public class SteepestAscent<S extends State<S>> {
 		// Determine the quality of the current state.
 		double currentDistance = heuristic.determineEstimatedDistanceToGoal(currentState);
 		// Create a complete list of possible successor states.
-		List<S> successorStates = currentState.determineAvailableActions().stream().map(action -> action.getResultingState()).collect(Collectors.toList());
+		List<S> successorStates = currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList());
 		// Randomise the order of the list in order to prevent walking in tiny circles around a plateau.
 		Collections.shuffle(successorStates);
 		for (S successorState : successorStates) {
@@ -60,7 +62,7 @@ public class SteepestAscent<S extends State<S>> {
 			// The newly found current state is of a higher quality than the state that was current at the start of this step. Return this new current state.
 			currentNrPlateauMoves = 0;
 			return currentState;
-		} else if (currentDistance == currentState.getHeuristicDistanceFromGoal()
+		} else if (Util.equalValue(currentDistance, currentState.getHeuristicDistanceFromGoal())
 				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
 			// The newly found current state is of the same quality as the state that was current at the start of this step. However, the maximum number of moves among same-quality
 			// states has not yet been exceeded, so keep going.
