@@ -1,11 +1,11 @@
 package path;
 
+import core.Action;
+import core.Heuristic;
+
 import java.util.Collection;
 import java.util.PriorityQueue;
 import java.util.Queue;
-
-import core.Action;
-import core.Heuristic;
 
 /** Implements the A* path-finding algorithm. */
 public class AStarTree<S extends State<S>> {

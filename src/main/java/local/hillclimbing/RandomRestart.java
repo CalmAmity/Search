@@ -1,9 +1,9 @@
 package local.hillclimbing;
 
-import java.util.function.Supplier;
-
 import core.Heuristic;
 import core.State;
+
+import java.util.function.Supplier;
 
 /** Implements random restart hill climbing. */
 public class RandomRestart<S extends State<S>> {
