@@ -1,10 +1,14 @@
 package path;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 /** Utility class that provides support methods for path search algorithms. */
 public final class PathSearchUtil {
+	private static Logger log = LoggerFactory.getLogger(PathSearchUtil.class);
 	// This class is not meant to be instantiated.
 	private PathSearchUtil() {
 	}
@@ -27,8 +31,7 @@ public final class PathSearchUtil {
 		
 		// Pop each state from the stack and print it to the console, starting with the starting state and ending with the provided state.
 		while (!goalPath.isEmpty()) {
-			System.out.println("---------");
-			System.out.println(goalPath.pop());
+			log.info("\n{}", goalPath.pop());
 		}
 	}
 }

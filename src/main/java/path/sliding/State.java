@@ -53,6 +53,23 @@ public class State implements path.State<State> {
 		}
 	}
 	
+	/**
+	 * Creates a state with the specified dimensions and randomises it.
+	 * @param width The desired width, in tiles, of the state.
+	 * @param height The desired height, in tiles, of the state.
+	 * @param nrSteps The number of random moves to make.
+	 */
+	public State(int width, int height, int nrSteps) {
+		this(width, height);
+		for (int step = 0; step < nrSteps; step++) {
+			randomMove();
+		}
+	}
+	
+	/**
+	 * Chooses a random move from all possible moves and performs it.
+	 * @return A new {@link State} object representing the state after one randomly selected move.
+	 */
 	public State randomMove() {
 		// Decide (at random) in which direction to slide.
 		List<Move> possibleMoves = determinePossibleMoves();
@@ -67,14 +84,6 @@ public class State implements path.State<State> {
 		actions.addAll(possibleMoves.stream().map(move -> new Action<>(performMove(move), 1)).collect(Collectors.toList()));
 		
 		return actions;
-	}
-	
-	static State createRandom(int width, int height, int nrSteps) {
-		State newState = new State(width, height);
-		for (int step = 0; step < nrSteps; step++) {
-			newState.randomMove();
-		}
-		return newState;
 	}
 	
 	public Integer findTileAt(int x, int y) {
@@ -114,6 +123,11 @@ public class State implements path.State<State> {
 		return xTile >= 0 && xTile < width && yTile >= 0 && yTile < height;
 	}
 	
+	/**
+	 * Performs the specified move from the current state.
+	 * @param move The move to be made.
+	 * @return A new {@link State} object representing the state after the move.
+	 */
 	public State performMove(Move move) {
 		State successor = new State(this);
 		successor.switchTiles(xBlank, yBlank, xBlank + move.relPosX, yBlank + move.relPosY);
@@ -139,21 +153,6 @@ public class State implements path.State<State> {
 	public boolean isGoalState() {
 		State goalState = new State(width, height);
 		return this.equals(goalState);
-	}
-	
-	public int determineManhattanDistance(State otherState) {
-		int totalDistance = 0;
-		for (int row = 0; row < height; row++) {
-			for (int column = 0; column < width; column++) {
-				Integer tile = findTileAt(column, row);
-				Point.IntegerPoint positionInOtherState = otherState.findTilePosition(tile);
-				int xDistance = Math.abs(column - positionInOtherState.determineCoordinate(0));
-				int yDistance = Math.abs(row - positionInOtherState.determineCoordinate(1));
-				totalDistance += xDistance + yDistance;
-			}
-		}
-		
-		return totalDistance;
 	}
 	
 	@Override
