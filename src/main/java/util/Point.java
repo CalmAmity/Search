@@ -101,6 +101,11 @@ public abstract class Point<T extends Number> {
 		return position.hashCode();
 	}
 	
+	@Override
+	public String toString() {
+		return position.toString();
+	}
+	
 	public static class IntegerPoint extends Point<Integer> {
 		public IntegerPoint(Integer... coordinates) {
 			super(coordinates);
