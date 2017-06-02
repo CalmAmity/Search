@@ -23,6 +23,10 @@ public class Visualiser extends Frame {
 	/** The extra height, in pixels, added by the top of a Windows frame. */
 	public static final int HEIGHT_OFFSET = 30;
 	
+	public static final Color LINE_COLOUR = new Color(140, 140, 140);
+	public static final Color POINT_COLOUR = new Color(46, 154, 171);
+	public static final Color TEXT_COLOUR = new Color(110, 172, 105);
+	
 	/** The width of the graph space, in the same units as used in the elements of {@link #locations}. */
 	private int widthInGraphUnits;
 	/** The height of the graph space, in the same units as used in the elements of {@link #locations}. */
@@ -55,7 +59,6 @@ public class Visualiser extends Frame {
 	@Override
 	public void paint(Graphics g) {
 		// Draw lines
-		g.setColor(Color.BLACK);
 		Set<Location> alreadyVisited = new HashSet<>();
 		for (Location location : locations) {
 			alreadyVisited.add(location);
@@ -69,7 +72,7 @@ public class Visualiser extends Frame {
 		}
 		
 		// Draw points
-		g.setColor(Color.GRAY);
+		g.setColor(POINT_COLOUR);
 		for (Location location : locations) {
 			drawPoint(g, location.getPoint());
 		}
@@ -96,6 +99,7 @@ public class Visualiser extends Frame {
 	 * @param label The label to show next to the line.
 	 */
 	protected void drawLine(Graphics graphics, Point<?> fromPoint, Point<?> toPoint, String label) {
+		graphics.setColor(LINE_COLOUR);
 		graphics.drawLine(
 				(int) ((fromPoint.determineCoordinate(0).doubleValue() / widthInGraphUnits) * PIXEL_WIDTH) + WIDTH_OFFSET,
 				(int) ((fromPoint.determineCoordinate(1).doubleValue() / heightInGraphUnits) * PIXEL_HEIGHT) + HEIGHT_OFFSET,
@@ -103,6 +107,7 @@ public class Visualiser extends Frame {
 				(int) ((toPoint.determineCoordinate(1).doubleValue() / heightInGraphUnits) * PIXEL_HEIGHT) + HEIGHT_OFFSET
 		);
 		
+		graphics.setColor(TEXT_COLOUR);
 		graphics.drawString(
 				label,
 				(int) (((fromPoint.determineCoordinate(0).doubleValue() + toPoint.determineCoordinate(0).doubleValue())

@@ -1,13 +1,20 @@
 package path.route;
 
+import org.junit.Test;
 import util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Test {
+public class StateTest {
 	public static void main(String[] args) {
+		StateTest test = new StateTest();
+		test.route();
+	}
+	
+	@Test
+	public void route() {
 		final int nrLocations = 10;
 		final int width = 10;
 		final int height = 10;
