@@ -27,7 +27,7 @@ public class StateTest {
 		Assert.assertNotEquals(state2, state3);
 		
 		// Thoroughly randomise a state.
-		for (int step = 0; step < 99; step++) {
+		for (int step = 0; step < 999; step++) {
 			state3 = state3.randomMove();
 		}
 		// Check that copying still works for a non-starting state.
