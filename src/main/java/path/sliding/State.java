@@ -1,6 +1,7 @@
 package path.sliding;
 
 import core.Action;
+import org.apache.commons.lang3.StringUtils;
 import util.Point;
 
 import java.util.ArrayList;
@@ -178,13 +179,15 @@ public class State implements path.State<State> {
 	
 	@Override
 	public String toString() {
+		// Determine the maximum number of digits in tile names, which will be used to determine the proper amount of leading zeroes.
+		int maxNrDigits = (int) Math.ceil(Math.log10((double) width * height));
 		StringBuilder result = new StringBuilder();
 		for (int row = 0; row < height; row++) {
 			result.append("[");
 			for (int column = 0; column < width; column++) {
-				result.append(findTileAt(column, row));
+				result.append(StringUtils.leftPad(String.valueOf(findTileAt(column, row)), maxNrDigits));
 				if (column < width - 1) {
-					result.append(", ");
+					result.append(" ");
 				}
 			}
 			result.append("]");
