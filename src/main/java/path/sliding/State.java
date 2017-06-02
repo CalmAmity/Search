@@ -60,11 +60,13 @@ public class State implements path.State<State> {
 	 * @param height The desired height, in tiles, of the state.
 	 * @param nrSteps The number of random moves to make.
 	 */
-	public State(int width, int height, int nrSteps) {
-		this(width, height);
+	public static State createRandomisedState(int width, int height, int nrSteps) {
+		State state = new State(width, height);
 		for (int step = 0; step < nrSteps; step++) {
-			randomMove();
+			state = state.randomMove();
 		}
+		
+		return state;
 	}
 	
 	/**
