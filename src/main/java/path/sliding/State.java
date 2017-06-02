@@ -109,16 +109,14 @@ public class State implements path.State<State> {
 		tiles.get(y).set(x, newTile);
 	}
 	
-	/**
-	 * Switches the tiles at the indicated positions.
-	 */
-	public void switchTiles(int firstX, int firstY, int secondX, int secondY) {
+	/** Switches the tiles at the indicated positions. */
+	private void switchTiles(int firstX, int firstY, int secondX, int secondY) {
 		Integer tileAtFirstPosition = findTileAt(firstX, firstY);
 		overwriteTileAt(firstX, firstY, findTileAt(secondX, secondY));
 		overwriteTileAt(secondX, secondY, tileAtFirstPosition);
 	}
 	
-	public boolean isMovePossible(Move move) {
+	private boolean isMovePossible(Move move) {
 		// Determine the position of the tile that would be slid as a result of this action.
 		int xTile = xBlank + move.relPosX;
 		int yTile = yBlank + move.relPosY;
