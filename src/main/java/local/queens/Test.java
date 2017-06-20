@@ -1,10 +1,10 @@
 package local.queens;
 
+import java.util.Arrays;
+
 import core.Heuristic;
 import local.hillclimbing.RandomRestart;
 import local.hillclimbing.SteepestAscent;
-
-import java.util.Arrays;
 
 public class Test {
 	public static void main(String[] args) {
@@ -14,22 +14,14 @@ public class Test {
 	public static void testRandomRestart() {
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
 		RandomRestart<State> search = new RandomRestart<>(heuristic);
-		State result = search.run(() -> new State(8));
-		System.out.println(result);
-		System.out.println("Distance: " + result.getHeuristicDistanceFromGoal());
+		search.run(() -> new State(8));
 	}
 	
 	public static void testSteepestAscent() {
 		State state = new State(8);
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
 		SteepestAscent<State> climb = new SteepestAscent<>(state, heuristic, 100);
-		while(state != null) {
-			System.out.println(state);
-			heuristic.determineEstimatedDistanceToGoal(state);
-			System.out.println("Distance: " + state.getHeuristicDistanceFromGoal());
-			System.out.println("==========");
-			state = climb.performStep();
-		}
+		climb.run();
 	}
 	
 	public static void testAvailableActions() {

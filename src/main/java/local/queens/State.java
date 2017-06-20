@@ -1,11 +1,11 @@
 package local.queens;
 
-import core.Action;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Random;
+
+import core.Action;
 
 /** Represents a single state in the 8 Queens Problem (generalised to the X Queens Problem). */
 public class State implements core.State<State> {
@@ -142,6 +142,10 @@ public class State implements core.State<State> {
 			if (row < board.length - 1) {
 				result.append("\n");
 			}
+		}
+		
+		if (heuristicDistanceFromGoal != null) {
+			result.append("\nDistance: ").append(heuristicDistanceFromGoal);
 		}
 		
 		return result.toString();
