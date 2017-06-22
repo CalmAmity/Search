@@ -9,8 +9,10 @@ public class QueensTest {
 	@Test
 	public void randomRestart() {
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
-		RandomRestart<State> search = new RandomRestart<>(heuristic);
+		RandomRestart<State> search = new RandomRestart<>(heuristic, null, 0);
 		search.run(() -> new State(8));
+		// TODO test maximum iterations
+		// TODO test distance margin
 	}
 	
 	@Test
