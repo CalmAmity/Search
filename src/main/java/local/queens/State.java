@@ -100,20 +100,8 @@ public class State implements core.State<State> {
 			return false;
 		}
 		
-		State otherState = (State) otherObject;
-		if (this.determineDimensions() != otherState.determineDimensions()) {
-			// The other state uses different board dimensions.
-			return false;
-		}
-		
-		for (int column = 0; column < board.length; column++) {
-			if (this.board[column] != otherState.board[column]) {
-				// The queen in the current column is in different positions.
-				return false;
-			}
-		}
-		
-		return true;
+		// The other object is an instance of this class. The only thing that matters now is the board configuration.
+		return Arrays.equals(this.board, ((State) otherObject).board);
 	}
 	
 	@Override
