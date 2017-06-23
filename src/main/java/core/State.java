@@ -13,9 +13,13 @@ public interface State<S extends State<S>> {
 	/** @return a collection of all actions available to an agent in this state. */
 	Collection<Action<S>> determineAvailableActions();
 	
-	/** @return the distance from a/the goal state, as determined/estimated by a heuristic function. */
+	/**
+	 * @return the distance from a/the goal state, as determined/estimated by a heuristic function. This value is stored with the state to prevent states from lingering in memory.
+	 */
 	Double getHeuristicDistanceFromGoal();
 	
-	/** Updates the distance from a/the goal state, as determined/estimated by a heuristic function. */
+	/**
+	 * Updates the distance from a/the goal state, as determined/estimated by a heuristic function. This value is stored with the state to prevent states from lingering in memory.
+	 */
 	void setHeuristicDistanceFromGoal(Double distance);
 }
