@@ -49,7 +49,7 @@ public class RandomRestart<S extends State<S>> {
 			// Randomly create a start state for this iteration, and perform a steepest ascent hill climbing search starting from this state.
 			SteepestAscent<S> search = new SteepestAscent<>(stateConstructor.get(), heuristic);
 			currentEndState = search.run();
-		} while (currentEndState.getHeuristicDistanceFromGoal() > heuristic.getBestPossibleScore() + qualityMargin);
+		} while (currentEndState.getQualityScore() < heuristic.getBestPossibleScore() - qualityMargin);
 		
 		log.debug("Stopped after {} iterations.", nrIterationsPerformed);
 		return currentEndState;

@@ -1,15 +1,15 @@
 package path.route;
 
-import org.junit.Test;
-import util.Point;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class StateTest {
+import org.junit.Test;
+import util.Point;
+
+public class PathSearchTest {
 	public static void main(String[] args) {
-		StateTest test = new StateTest();
+		PathSearchTest test = new PathSearchTest();
 		test.route();
 	}
 	

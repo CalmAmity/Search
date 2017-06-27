@@ -1,11 +1,11 @@
 package path;
 
-import core.Action;
-import core.Heuristic;
-
 import java.util.Collection;
 import java.util.PriorityQueue;
 import java.util.Queue;
+
+import core.Action;
+import core.Heuristic;
 
 /** Implements the A* path-finding algorithm. */
 public class AStarTree<S extends State<S>> {
@@ -19,19 +19,25 @@ public class AStarTree<S extends State<S>> {
 		// Initialise the frontier as a priority queue that orders members based on the score assigned to them by the heuristic function.
 		frontier = new PriorityQueue<>(
 				(state1, state2) -> {
-					double difference = (state1.getCost() + state1.getHeuristicDistanceFromGoal()) - (state2.getCost() + state2.getHeuristicDistanceFromGoal());
+					// Determine the heuristic cost of the two states, which is equal to the actual cost of reaching the state, plus the negative of the quality score.
+					double state1HeuristicCost = state1.getCost() + -state1.getQualityScore();
+					double state2HeuristicCost = state2.getCost() + -state2.getQualityScore();
+					double difference = state1HeuristicCost - state2HeuristicCost;
 					if (difference < 0) {
+						// State 1 has a lower heuristic cost than state 2.
 						return -1;
 					} else if (difference > 0) {
+						// State 1 has a higher heuristic cost than state 2.
 						return 1;
 					} else {
+						// The two states have equal heuristic costs.
 						return 0;
 					}
 				}
 		);
 		
-		// Use the heuristic function to determine the distance between the start and goal states.
-		heuristic.determineEstimatedDistanceToGoal(startState);
+		// Use the heuristic function to determine the start state's quality score.
+		heuristic.determineQualityScore(startState);
 		frontier.add(startState);
 	}
 	
@@ -56,7 +62,7 @@ public class AStarTree<S extends State<S>> {
 			// Update this successor state with the cost of reaching it and add it to the frontier.
 			S resultingState = action.getResultingState();
 			resultingState.setCost(action.getCost());
-			heuristic.determineEstimatedDistanceToGoal(resultingState);
+			heuristic.determineQualityScore(resultingState);
 			frontier.add(resultingState);
 		}
 		
@@ -67,7 +73,7 @@ public class AStarTree<S extends State<S>> {
 	public String totalEstimatedCosts() {
 		StringBuilder result = new StringBuilder("[ ");
 		for (S state : frontier) {
-			double estimatedTotalCostForState = state.getCost() + state.getHeuristicDistanceFromGoal();
+			double estimatedTotalCostForState = state.getCost() + state.getQualityScore();
 			result.append(estimatedTotalCostForState).append(" ");
 		}
 		return result.append("]").toString();

@@ -5,7 +5,7 @@ import core.Heuristic;
 /** Implements the heuristic function that checks the number of pairs of queens that threaten each other. */
 public class NumberOfClashesHeuristic extends Heuristic<State> {
 	@Override
-	protected double estimateDistanceToGoal(State state) {
+	protected double estimateQualityScore(State state) {
 		double numberOfClashes = 0;
 		// Loop over the columns on the board. 
 		for (int columnBeingChecked = 0; columnBeingChecked < state.determineDimensions(); columnBeingChecked++) {
@@ -18,12 +18,12 @@ public class NumberOfClashesHeuristic extends Heuristic<State> {
 			}
 		}
 		
-		return numberOfClashes;
+		// The quality of the state is the number of clashes, negative.
+		return -numberOfClashes;
 	}
 	
 	@Override
 	public double getBestPossibleScore() {
-		// The best possible score is zero clashes.
 		return 0;
 	}
 }

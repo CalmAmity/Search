@@ -8,13 +8,13 @@ public class GlobalDistance extends Heuristic<State> {
 	private State goalState;
 	
 	@Override
-	protected double estimateDistanceToGoal(State state) {
-		return goalState.getCurrentLocation().getPoint().euclideanDistanceTo(state.getCurrentLocation().getPoint());
+	protected double estimateQualityScore(State state) {
+		// The quality of this state is the negative distance to the goal state.
+		return -goalState.getCurrentLocation().getPoint().euclideanDistanceTo(state.getCurrentLocation().getPoint());
 	}
 	
 	@Override
 	public double getBestPossibleScore() {
-		// The best possible score is a distance of zero.
 		return 0;
 	}
 }

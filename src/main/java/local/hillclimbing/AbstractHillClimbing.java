@@ -45,7 +45,7 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	 * @return The new best state, or {@code null} if no successor state is better than {@code #currentState}.
 	 */
 	private S performStep() {
-		if (Util.equalValue(heuristic.determineEstimatedDistanceToGoal(currentState), heuristic.getBestPossibleScore())) {
+		if (Util.equalValue(heuristic.determineQualityScore(currentState), heuristic.getBestPossibleScore())) {
 			// The current state has the best score it is possible to achieve using the current heuristic. Stop the search.
 			return null;
 		}

@@ -59,18 +59,18 @@ public class SlidingTest {
 	public void manhattan() {
 		Heuristic<State> heuristic = new ManhattanDistance();
 		State state = new State(3, 3);
-		Assert.assertEquals(0, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(0, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_UP);
-		Assert.assertEquals(2, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-2, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_LEFT);
-		Assert.assertEquals(4, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-4, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_DOWN);
-		Assert.assertEquals(4, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-4, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_RIGHT);
-		Assert.assertEquals(4, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-4, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_UP);
-		Assert.assertEquals(6, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-6, heuristic.determineQualityScore(state), 0.00001);
 		state = state.performMove(Move.SLIDE_UP);
-		Assert.assertEquals(8, heuristic.determineEstimatedDistanceToGoal(state), 0.00001);
+		Assert.assertEquals(-8, heuristic.determineQualityScore(state), 0.00001);
 	}
 }

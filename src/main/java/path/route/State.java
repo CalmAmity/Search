@@ -1,9 +1,9 @@
 package path.route;
 
-import core.Action;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
+
+import core.Action;
 
 /** Represents a state in the route search problem. */
 public class State implements path.State<State> {
@@ -11,8 +11,8 @@ public class State implements path.State<State> {
 	private Location currentLocation;
 	/** The cost of reaching this state from the starting state. */
 	private double cost;
-	/** The distance between this state and the goal state, as estimated by a heuristic function. */
-	private Double heuristicDistanceFromGoal;
+	/** This state's quality score, as estimated by a heuristic function. */
+	private Double qualityScore;
 	/** The state that preceded this one in the route currently being explored. */
 	private State predecessor;
 	
@@ -55,13 +55,13 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public Double getHeuristicDistanceFromGoal() {
-		return heuristicDistanceFromGoal;
+	public Double getQualityScore() {
+		return qualityScore;
 	}
 	
 	@Override
-	public void setHeuristicDistanceFromGoal(Double distance) {
-		heuristicDistanceFromGoal = distance;
+	public void setQualityScore(Double qualityScore) {
+		this.qualityScore = qualityScore;
 	}
 	
 	public Location getCurrentLocation() {

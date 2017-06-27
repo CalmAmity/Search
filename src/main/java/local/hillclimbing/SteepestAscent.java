@@ -24,19 +24,19 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 		// Find the highest-quality successor state.
 		S newState = currentState;
 		for (S successorState : possibleSuccessors) {
-			if (heuristic.determineEstimatedDistanceToGoal(successorState) <= newState.getHeuristicDistanceFromGoal()) {
+			if (heuristic.determineQualityScore(successorState) >= newState.getQualityScore()) {
 				// This successor state is of a higher quality than the current state. Make this the new state.
 				newState = successorState;
 			}
 		}
 		
 		// Determine the quality of the current state.
-		double currentDistance = heuristic.determineEstimatedDistanceToGoal(currentState);
-		if (currentDistance > newState.getHeuristicDistanceFromGoal()) {
+		double currentStateQuality = heuristic.determineQualityScore(currentState);
+		if (currentStateQuality > newState.getQualityScore()) {
 			// The new state is of a higher quality than the current state. Return this new state.
 			currentNrPlateauMoves = 0;
 			return newState;
-		} else if (Util.equalValue(currentDistance, newState.getHeuristicDistanceFromGoal())
+		} else if (Util.equalValue(currentStateQuality, newState.getQualityScore())
 				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
 			// The new state is of the same quality as the current state. However, the maximum number of moves among same-quality states has not yet been exceeded, so keep going.
 			currentNrPlateauMoves++;

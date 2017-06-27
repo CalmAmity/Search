@@ -6,24 +6,24 @@ package core;
  */
 public abstract class Heuristic<S extends core.State<S>> {
 	/**
-	 * Determines the estimated distance to a/the goal state using the heuristic function defined by this class, and stores it with the state.
-	 * @param state The state for which to determine the distance.
-	 * @return The distance of the provided state from the goal, as determined by the heuristic function.
+	 * Determines the quality of the provided state using the heuristic function defined by this class, and stores it with the state.
+	 * @param state The state for which to determine the quality.
+	 * @return The quality score of the provided state, as determined by the heuristic function.
 	 */
-	public double determineEstimatedDistanceToGoal(S state) {
-		if (state.getHeuristicDistanceFromGoal() == null) {
-			// The distance for this state has not yet been defined. Do so now.
-			state.setHeuristicDistanceFromGoal(estimateDistanceToGoal(state));
+	public double determineQualityScore(S state) {
+		if (state.getQualityScore() == null) {
+			// The quality score for this state has not yet been defined. Do so now.
+			state.setQualityScore(estimateQualityScore(state));
 		}
-		return state.getHeuristicDistanceFromGoal();
+		return state.getQualityScore();
 	}
 	
 	/**
-	 * Implements the heuristic function, using it to determine the provided state's distance from a/the goal state.
-	 * @param state The state for which to determine the distance.
-	 * @return The distance of the provided state from the goal, as determined by the heuristic function.
+	 * Implements the heuristic function, using it to determine the provided state's quality.
+	 * @param state The state for which to determine the quality.
+	 * @return The quality score for the provided state, as determined by the heuristic function.
 	 */
-	protected abstract double estimateDistanceToGoal(S state);
+	protected abstract double estimateQualityScore(S state);
 	
 	/** @return the best possible score a state can achieve with this heuristic. A state with this score can be regarded as a goal state. */
 	public abstract double getBestPossibleScore();

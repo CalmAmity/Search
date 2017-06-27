@@ -12,7 +12,7 @@ public class State implements core.State<State> {
 	/** Represents the chess board. Every position in the array corresponds to a column on the board, and the integer in that position indicates the row the queen is in. */
 	private int[] board;
 	
-	private Double heuristicDistanceFromGoal;
+	private Double qualityScore;
 
 	/**
 	 * Creates a valid state with the specified dimensions and random queen placement.
@@ -132,8 +132,8 @@ public class State implements core.State<State> {
 			}
 		}
 		
-		if (heuristicDistanceFromGoal != null) {
-			result.append("\nDistance: ").append(heuristicDistanceFromGoal);
+		if (qualityScore != null) {
+			result.append("\nQuality: ").append(qualityScore);
 		}
 		
 		return result.toString();
@@ -145,12 +145,12 @@ public class State implements core.State<State> {
 	}
 
 	@Override
-	public Double getHeuristicDistanceFromGoal() {
-		return heuristicDistanceFromGoal;
+	public Double getQualityScore() {
+		return qualityScore;
 	}
 	
 	@Override
-	public void setHeuristicDistanceFromGoal(Double distance) {
-		heuristicDistanceFromGoal = distance;
+	public void setQualityScore(Double qualityScore) {
+		this.qualityScore = qualityScore;
 	}
 }

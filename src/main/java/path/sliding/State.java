@@ -1,14 +1,14 @@
 package path.sliding;
 
-import core.Action;
-import org.apache.commons.lang3.StringUtils;
-import util.Point;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import core.Action;
+import org.apache.commons.lang3.StringUtils;
+import util.Point;
 
 public class State implements path.State<State> {
 	private State predecessor;
@@ -18,7 +18,7 @@ public class State implements path.State<State> {
 	private int xBlank;
 	private int yBlank;
 	private int cost;
-	private Double heuristicDistanceFromGoal;
+	private Double qualityScore;
 	
 	public State(int width, int height) {
 		this.width = width;
@@ -236,12 +236,12 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public Double getHeuristicDistanceFromGoal() {
-		return heuristicDistanceFromGoal;
+	public Double getQualityScore() {
+		return qualityScore;
 	}
 	
 	@Override
-	public void setHeuristicDistanceFromGoal(Double distance) {
-		heuristicDistanceFromGoal = distance;
+	public void setQualityScore(Double qualityScore) {
+		this.qualityScore = qualityScore;
 	}
 }

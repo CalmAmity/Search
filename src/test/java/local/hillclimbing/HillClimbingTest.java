@@ -27,7 +27,7 @@ public class HillClimbingTest {
 		for (int testIteration = 0; testIteration < 10; testIteration++) {
 			RandomRestart<State> searchWithMaxIterations = new RandomRestart<>(heuristic, null, qualityMargin);
 			State state = searchWithMaxIterations.run(() -> new State(4));
-			Assert.assertTrue(heuristic.determineEstimatedDistanceToGoal(state) <= heuristic.getBestPossibleScore() + qualityMargin + .0001);
+			Assert.assertTrue(heuristic.determineQualityScore(state) <= heuristic.getBestPossibleScore() + qualityMargin + .0001);
 		}
 	}
 	
