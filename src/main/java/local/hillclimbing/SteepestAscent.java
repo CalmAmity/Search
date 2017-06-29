@@ -5,7 +5,6 @@ import java.util.List;
 
 import core.Heuristic;
 import core.State;
-import util.Util;
 
 /** Implements a simple form of the steepest ascent hill-climbing algorithm. */
 public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> {
@@ -30,20 +29,6 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 			}
 		}
 		
-		// Determine the quality of the current state.
-		double currentStateQuality = heuristic.determineQualityScore(currentState);
-		if (currentStateQuality > newState.getQualityScore()) {
-			// The new state is of a higher quality than the current state. Return this new state.
-			currentNrPlateauMoves = 0;
-			return newState;
-		} else if (Util.equalValue(currentStateQuality, newState.getQualityScore())
-				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
-			// The new state is of the same quality as the current state. However, the maximum number of moves among same-quality states has not yet been exceeded, so keep going.
-			currentNrPlateauMoves++;
-			return newState;
-		} else {
-			// All states adjacent to the current one are of lower quality. Return null to signify this.
-			return null;
-		}
+		return newState;
 	}
 }

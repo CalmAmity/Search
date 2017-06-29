@@ -44,7 +44,7 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	 * Performs a single step in the algorithm, by generating all possible successor states and moving to the best one.
 	 * @return The new best state, or {@code null} if no successor state is better than {@code #currentState}.
 	 */
-	private S performStep() {
+	protected S performStep() {
 		if (Util.equalValue(heuristic.determineQualityScore(currentState), heuristic.getBestPossibleScore())) {
 			// The current state has the best score it is possible to achieve using the current heuristic. Stop the search.
 			return null;
@@ -52,7 +52,21 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 		
 		// Create a complete list of possible successor states.
 		List<S> successorStates = currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList());
-		return determineSuccessorState(successorStates);
+		S selectedSuccessor = determineSuccessorState(successorStates);
+		
+		if (selectedSuccessor.getQualityScore() > currentState.getQualityScore()) {
+			// The new state is of a higher quality than the current state. Return this new state.
+			currentNrPlateauMoves = 0;
+			return selectedSuccessor;
+		} else if (Util.equalValue(selectedSuccessor.getQualityScore(), currentState.getQualityScore())
+				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
+			// The new state is of the same quality as the current state. However, the maximum number of moves among same-quality states has not yet been exceeded, so keep going.
+			currentNrPlateauMoves++;
+			return selectedSuccessor;
+		} else {
+			// All states adjacent to the current one are of lower quality. Return null to signify this.
+			return null;
+		}
 	}
 	
 	/**
@@ -79,10 +93,6 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 			currentState = nextState;
 		}
 		
-		return currentState;
-	}
-	
-	public S getCurrentState() {
 		return currentState;
 	}
 }

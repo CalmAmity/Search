@@ -38,4 +38,12 @@ public class HillClimbingTest {
 		SteepestAscent<State> climb = new SteepestAscent<>(state, heuristic, 100);
 		climb.run();
 	}
+	
+	@Test
+	public void stochastic() {
+		State state = new State(8);
+		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
+		Stochastic<State> climb = new Stochastic<>(state, heuristic, 100);
+		climb.run();
+	}
 }
