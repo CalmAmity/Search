@@ -19,22 +19,21 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	/** The best state that has been found. The next step will be performed from this state. */
 	protected S currentState;
 	/** The heuristic used to judge the quality of states. */
-	protected Heuristic<S> heuristic;
+	protected final Heuristic<S> heuristic;
 	/** The maximum number of consecutive moves the algorithm is allowed to make among states with the same quality. */
 	protected final int maximumNrPlateauMoves;
 	/** The number of consecutive moves the algorithm has currently made without finding a state of higher quality. */
 	protected int currentNrPlateauMoves;
+	/** Indicates if downhill moves are allowed. If {@code false} (the default), the search will stop in any local maximum it reaches. */
+	protected boolean allowDownhillMoves;
 	
 	/**
 	 * Constructs a new state object.
 	 * @param startState The state from which the algorithm should start searching.
 	 * @param heuristic The heuristic that should be used to judge the quality of states.
+	 * @param maximumNrPlateauMoves The maximum number of consecutive moves the algorithm is allowed to make among states with the same quality.
 	 */
-	public AbstractHillClimbing(S startState, Heuristic<S> heuristic) {
-		this(startState, heuristic, 0);
-	}
-	
-	public AbstractHillClimbing(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
+	protected AbstractHillClimbing(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
 		currentState = startState;
 		this.heuristic = heuristic;
 		this.maximumNrPlateauMoves = maximumNrPlateauMoves;
@@ -54,17 +53,25 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 		List<S> successorStates = currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList());
 		S selectedSuccessor = determineSuccessorState(successorStates);
 		
-		if (selectedSuccessor.getQualityScore() > currentState.getQualityScore()) {
-			// The new state is of a higher quality than the current state. Return this new state.
-			currentNrPlateauMoves = 0;
-			return selectedSuccessor;
-		} else if (Util.equalValue(selectedSuccessor.getQualityScore(), currentState.getQualityScore())
+		if (selectedSuccessor == null) {
+			// The selection algorithm has decided that the search is finished.
+			return null;
+		}
+		
+		if (Util.equalValue(selectedSuccessor.getQualityScore(), currentState.getQualityScore())
 				&& currentNrPlateauMoves < maximumNrPlateauMoves) {
-			// The new state is of the same quality as the current state. However, the maximum number of moves among same-quality states has not yet been exceeded, so keep going.
+			// The new state is of the same quality as the current state. The maximum number of moves among same-quality states has not yet been exceeded, so keep going.
 			currentNrPlateauMoves++;
 			return selectedSuccessor;
+		} else if (selectedSuccessor.getQualityScore() > currentState.getQualityScore()) {
+			// The new state is superior to the current state. Indicate that we have left the plateau (if any), and return the new state.
+			currentNrPlateauMoves = 0;
+			return selectedSuccessor;
+		} else if (allowDownhillMoves) {
+			// The new state is inferior to the current state, and choosing inferior states is allowed. Return the new state.
+			return selectedSuccessor;
 		} else {
-			// All states adjacent to the current one are of lower quality. Return null to signify this.
+			// The new state is inferior to the current state, and choosing inferior states is not allowed. Return null to signify that the search has ended.
 			return null;
 		}
 	}

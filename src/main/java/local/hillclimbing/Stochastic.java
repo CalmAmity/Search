@@ -10,7 +10,7 @@ import util.Util;
 
 public class Stochastic<S extends State<S>> extends AbstractHillClimbing<S> {
 	public Stochastic(S startState, Heuristic<S> heuristic) {
-		super(startState, heuristic);
+		this(startState, heuristic, 0);
 	}
 	
 	public Stochastic(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
@@ -23,6 +23,11 @@ public class Stochastic<S extends State<S>> extends AbstractHillClimbing<S> {
 		List<S> nonDownhillMoves = possibleSuccessors.stream()
 				.filter(state -> heuristic.determineQualityScore(state) >= heuristic.determineQualityScore(currentState) - Util.ERROR_MARGIN_FOR_FLOAT_COMPARISON)
 				.collect(Collectors.toList());
+		
+		if (nonDownhillMoves.isEmpty()) {
+			// All possible successors are downhill moves. These are not allowed, which means the search has finished. Return null to signify this.
+			return null;
+		}
 		
 		// Determine the individual weights of the states.
 		List<Double> weights = determineWeights(nonDownhillMoves);

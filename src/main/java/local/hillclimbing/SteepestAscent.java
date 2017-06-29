@@ -9,7 +9,7 @@ import core.State;
 /** Implements a simple form of the steepest ascent hill-climbing algorithm. */
 public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> {
 	public SteepestAscent(S startState, Heuristic<S> heuristic) {
-		super(startState, heuristic);
+		this(startState, heuristic, 0);
 	}
 	
 	public SteepestAscent(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
@@ -18,7 +18,7 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 	
 	@Override
 	protected S determineSuccessorState(List<S> possibleSuccessors) {
-		// Randomise the order of the list in order to prevent walking in tiny circles around a plateau.
+		// Randomise the order of the list in order to prevent walking around a plateau in tiny circles.
 		Collections.shuffle(possibleSuccessors);
 		// Find the highest-quality successor state.
 		S newState = currentState;
@@ -27,6 +27,12 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 				// This successor state is of a higher quality than the current state. Make this the new state.
 				newState = successorState;
 			}
+		}
+		
+		if (newState.getQualityScore() < currentState.getQualityScore()) {
+			// All of the possible successors have a lower score than the current state. A local maximum has been reached, which means this search has finished. Return null to
+			// signify this.
+			return null;
 		}
 		
 		return newState;

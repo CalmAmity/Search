@@ -45,4 +45,12 @@ public class HillClimbingTest {
 		Stochastic<State> climb = new Stochastic<>(state, heuristic, 100);
 		climb.run();
 	}
+	
+	@Test
+	public void simulatedAnnealing() {
+		State state = new State(8);
+		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
+		SimulatedAnnealing<State> climb = new SimulatedAnnealing<>(state, heuristic, .05);
+		climb.run();
+	}
 }
