@@ -90,6 +90,9 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	public S run() {
 		while (true) {
 			log.debug("Current state:\n{}", currentState);
+			if (!log.isDebugEnabled()) {
+				log.info("Current state quality: {}", currentState.getQualityScore());
+			}
 			// Perform the next step.
 			S nextState = performStep();
 			if (nextState == null) {
@@ -100,6 +103,7 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 			currentState = nextState;
 		}
 		
+		log.info("Final state:\n{}", currentState);
 		return currentState;
 	}
 }

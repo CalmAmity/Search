@@ -24,11 +24,14 @@ public class RandomRestart<S extends State<S>> {
 	 * {@link Heuristic#getBestPossibleScore()}). If the end state of an iteration has a score closer than this to the optimal score, the algorithm will stop.
 	 */
 	private final double qualityMargin;
+	/** The maximum number of consecutive moves a single iteration of the algorithm is allowed to make among states with the same quality. */
+	protected final int maximumNrPlateauMoves;
 	
-	public RandomRestart(Heuristic<S> heuristic, Integer maximumNrIterations, double qualityMargin) {
+	public RandomRestart(Heuristic<S> heuristic, Integer maximumNrIterations, double qualityMargin, int maximumNrPlateauMoves) {
 		this.heuristic = heuristic;
 		this.maximumNrIterations = maximumNrIterations;
 		this.qualityMargin = qualityMargin;
+		this.maximumNrPlateauMoves = maximumNrPlateauMoves;
 	}
 	
 	/**
@@ -47,11 +50,11 @@ public class RandomRestart<S extends State<S>> {
 			nrIterationsPerformed++;
 			log.debug("Starting iteration #{}", nrIterationsPerformed);
 			// Randomly create a start state for this iteration, and perform a steepest ascent hill climbing search starting from this state.
-			SteepestAscent<S> search = new SteepestAscent<>(stateConstructor.get(), heuristic);
+			SteepestAscent<S> search = new SteepestAscent<>(stateConstructor.get(), heuristic, maximumNrPlateauMoves);
 			currentEndState = search.run();
 		} while (currentEndState.getQualityScore() < heuristic.getBestPossibleScore() - qualityMargin);
 		
-		log.debug("Stopped after {} iterations.", nrIterationsPerformed);
+		log.info("Stopped after {} iterations.", nrIterationsPerformed);
 		return currentEndState;
 	}
 }

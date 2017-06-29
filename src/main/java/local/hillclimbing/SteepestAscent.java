@@ -8,10 +8,6 @@ import core.State;
 
 /** Implements a simple form of the steepest ascent hill-climbing algorithm. */
 public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> {
-	public SteepestAscent(S startState, Heuristic<S> heuristic) {
-		this(startState, heuristic, 0);
-	}
-	
 	public SteepestAscent(S startState, Heuristic<S> heuristic, int maximumNrPlateauMoves) {
 		super(startState, heuristic, maximumNrPlateauMoves);
 	}
