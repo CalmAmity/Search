@@ -6,7 +6,6 @@ import local.queens.State;
 import org.junit.Assert;
 import org.junit.Test;
 
-// todo Create proper unit tests: mock the heuristic to make the outcome deterministic (rhyme unintentional), fixing expected behaviour.
 public class HillClimbingTest {
 	@Test
 	public void randomRestart() {
