@@ -1,5 +1,7 @@
 package util;
 
+import java.util.List;
+
 /** Contains general-purpose utility methods. */
 public class Util {
 	/** A pre-defined error margin for comparison of floating point numbers. */
@@ -27,5 +29,42 @@ public class Util {
 	 */
 	public static boolean equalValue(double value1, double value2, double margin) {
 		return Math.abs(value1 - value2) <= Math.abs(margin);
+	}
+	
+	/**
+	 * Finds the first value in {@code searchList} that is greater than or equal to {@code searchValue}.
+	 * @param searchValue The value to search for.
+	 * @param searchList A list of double values, in ascending order. If the values are not in ascending order, the behaviour of this method is undefined.
+	 * @return the index of the result value.
+	 */
+	public static int binarySearch(double searchValue, List<Double> searchList) {
+		// Initialise the bounds of the search range as the bounds of entire list. These bounds are both inclusive.
+		int beginIndex = 0;
+		int endIndex = searchList.size() - 1;
+		
+		if (searchValue > searchList.get(endIndex)) {
+			// The search value is outside of the search list.
+			throw new IndexOutOfBoundsException("Search value " + searchValue + " not found in list with maximum value " + searchList.get(endIndex));
+		}
+		
+		while (true) {
+			if (beginIndex == endIndex) {
+				// The (inclusive) lower and upper bounds are equal, which means that only one possible value remains. Return that value's index.
+				return beginIndex;
+			}
+			
+			// Determine the middle of the search range.
+			int middleIndex = (beginIndex + endIndex) / 2;
+			
+			if (searchList.get(middleIndex) < searchValue) {
+				// The value in the middle of the search range is lower than the value that is being searched for, which means that it is not a valid result. The position
+				// immediately after the middle index is the new lower bound.
+				beginIndex = middleIndex + 1;
+			} else {
+				// The value in the middle of the search range is higher than the value that is being searched for, which means that it is the latest possible valid result. The
+				// middle index is the new upper bound.
+				endIndex = middleIndex;
+			}
+		}
 	}
 }

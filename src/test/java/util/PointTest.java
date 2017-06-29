@@ -1,23 +1,17 @@
 package util;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class PointTest {
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
-	
 	@Test
 	public void constructor() {
 		// Test some valid calls.
 		new Point.IntegerPoint(1, 2, 3);
 		new Point.DoublePoint(new Double[]{4d, 5d, 6d});
 		// Test some invalid calls.
-		expectedException.expect(IllegalArgumentException.class);
-		new Point.IntegerPoint();
-		new Point.DoublePoint(new Double[]{});
+		TestUtils.executeMethodCallExpectException(Point.IntegerPoint::new, IllegalArgumentException.class);
+		TestUtils.executeMethodCallExpectException(() -> new Point.DoublePoint(new Double[]{}), IllegalArgumentException.class);
 	}
 	
 	@Test
@@ -28,10 +22,9 @@ public class PointTest {
 		Assert.assertEquals(5.604078661310774, point1.euclideanDistanceTo(point2), .00000001);
 		
 		// Check for exceptions when the points are incomparable.
-		expectedException.expect(IllegalArgumentException.class);
 		Point.IntegerPoint point3 = new Point.IntegerPoint(7, 8);
-		point1.manhattanDistanceTo(point3);
-		point3.euclideanDistanceTo(point1);
+		TestUtils.executeMethodCallExpectException(() -> point1.manhattanDistanceTo(point3), IllegalArgumentException.class);
+		TestUtils.executeMethodCallExpectException(() -> point3.euclideanDistanceTo(point1), IllegalArgumentException.class);
 	}
 	
 	@Test

@@ -1,20 +1,16 @@
 package path.sliding;
 
+import java.util.List;
+
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Point;
-
-import java.util.List;
+import util.TestUtils;
 
 public class StateTest {
 	private static Logger log = LoggerFactory.getLogger(StateTest.class);
-	
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
 	
 	@Test
 	public void copy() {
@@ -59,62 +55,56 @@ public class StateTest {
 	@Test
 	public void determineAvailableMoves() {
 		// Construct a 3x3 start state.
-		State state = new State(3, 3);
+		final State state = new State(3, 3);
 		// Check that only 'up' and 'left' are legal moves.
 		state.performMove(Move.SLIDE_UP);
 		state.performMove(Move.SLIDE_LEFT);
-		expectedException.expect(ArrayIndexOutOfBoundsException.class);
-		state.performMove(Move.SLIDE_DOWN);
-		state.performMove(Move.SLIDE_RIGHT);
-		expectedException = ExpectedException.none();
+		TestUtils.executeMethodCallExpectException(() -> state.performMove(Move.SLIDE_DOWN), IndexOutOfBoundsException.class);
+		TestUtils.executeMethodCallExpectException(() -> state.performMove(Move.SLIDE_RIGHT), IndexOutOfBoundsException.class);
 		// Check that determinePossibleMoves() agrees.
 		List<Move> availableMoves = state.determinePossibleMoves();
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_UP));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_LEFT));
 		Assert.assertFalse(availableMoves.contains(Move.SLIDE_DOWN));
 		Assert.assertFalse(availableMoves.contains(Move.SLIDE_RIGHT));
-		
+
 		// Perform the 'left' move.
-		state = state.performMove(Move.SLIDE_LEFT);
+		final State state2 = state.performMove(Move.SLIDE_LEFT);
 		// Check that 'right' has now joined the available moves.
-		state.performMove(Move.SLIDE_UP);
-		state.performMove(Move.SLIDE_LEFT);
-		state.performMove(Move.SLIDE_RIGHT);
-		expectedException.expect(ArrayIndexOutOfBoundsException.class);
-		state.performMove(Move.SLIDE_DOWN);
-		expectedException = ExpectedException.none();
+		state2.performMove(Move.SLIDE_UP);
+		state2.performMove(Move.SLIDE_LEFT);
+		state2.performMove(Move.SLIDE_RIGHT);
+		TestUtils.executeMethodCallExpectException(() -> state2.performMove(Move.SLIDE_DOWN), IndexOutOfBoundsException.class);
 		// Check that determinePossibleMoves() agrees.
-		availableMoves = state.determinePossibleMoves();
+		availableMoves = state2.determinePossibleMoves();
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_UP));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_LEFT));
 		Assert.assertFalse(availableMoves.contains(Move.SLIDE_DOWN));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_RIGHT));
-		
+
 		// Perform the 'up' move.
-		state = state.performMove(Move.SLIDE_UP);
+		final State state3 = state2.performMove(Move.SLIDE_UP);
 		// Check that all moves are now available.
-		state.performMove(Move.SLIDE_UP);
-		state.performMove(Move.SLIDE_LEFT);
-		state.performMove(Move.SLIDE_RIGHT);
-		state.performMove(Move.SLIDE_DOWN);
+		state3.performMove(Move.SLIDE_UP);
+		state3.performMove(Move.SLIDE_LEFT);
+		state3.performMove(Move.SLIDE_RIGHT);
+		state3.performMove(Move.SLIDE_DOWN);
 		// Check that determinePossibleMoves() agrees.
-		availableMoves = state.determinePossibleMoves();
+		availableMoves = state3.determinePossibleMoves();
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_UP));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_LEFT));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_DOWN));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_RIGHT));
-		
+
 		// Perform the 'left' move.
-		state = state.performMove(Move.SLIDE_LEFT);
+		final State state4 = state3.performMove(Move.SLIDE_LEFT);
 		// Check that 'left' is no longer available.
-		state.performMove(Move.SLIDE_UP);
-		state.performMove(Move.SLIDE_RIGHT);
-		state.performMove(Move.SLIDE_DOWN);
-		expectedException.expect(ArrayIndexOutOfBoundsException.class);
-		state.performMove(Move.SLIDE_LEFT);
-		expectedException = ExpectedException.none();
+		state4.performMove(Move.SLIDE_UP);
+		state4.performMove(Move.SLIDE_RIGHT);
+		state4.performMove(Move.SLIDE_DOWN);
+		TestUtils.executeMethodCallExpectException(() -> state4.performMove(Move.SLIDE_LEFT), IndexOutOfBoundsException.class);
 		// Check that determinePossibleMoves() agrees.
-		availableMoves = state.determinePossibleMoves();
+		availableMoves = state4.determinePossibleMoves();
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_UP));
 		Assert.assertFalse(availableMoves.contains(Move.SLIDE_LEFT));
 		Assert.assertTrue(availableMoves.contains(Move.SLIDE_DOWN));
