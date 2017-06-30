@@ -49,9 +49,11 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 			return null;
 		}
 		
+		Util.measureMemoryUse();
 		// Create a complete list of possible successor states.
 		List<S> successorStates = currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList());
 		S selectedSuccessor = determineSuccessorState(successorStates);
+		Util.measureMemoryUse();
 		
 		if (selectedSuccessor == null) {
 			// The selection algorithm has decided that the search is finished.
@@ -103,6 +105,7 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 			currentState = nextState;
 		}
 		
+		Util.logMemoryUsage();
 		log.info("Final state:\n{}", currentState);
 		return currentState;
 	}

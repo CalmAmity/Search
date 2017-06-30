@@ -2,13 +2,22 @@ package util;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /** Contains general-purpose utility methods. */
 public class Util {
 	/** A pre-defined error margin for comparison of floating point numbers. */
 	public static final double ERROR_MARGIN_FOR_FLOAT_COMPARISON = 0.000001;
 	
-	private Util() {
-	}
+	private static Logger log = LoggerFactory.getLogger(Util.class);
+	/** The memory usage of the JVM in kB, averaged over all measurements. */
+	private static double averageMemoryUsageInKb;
+	/** The number of memory measurements that have been performed. */
+	private static long nrMemoryMeasurements;
+	
+	/** Everything is static / everything is cool when you're utilities! */
+	private Util() {}
 	
 	/**
 	 * Determines whether two {@code double} values are equal within the margin of error specified by {@link #ERROR_MARGIN_FOR_FLOAT_COMPARISON}.
@@ -66,5 +75,22 @@ public class Util {
 				endIndex = middleIndex;
 			}
 		}
+	}
+	
+	/** Measures the current memorage usage of the JVM and updates {@link #averageMemoryUsageInKb} accordingly. */
+	public static void measureMemoryUse() {
+		// Determine the current memory usage in kB.
+		long currentlyInUseMemoryInKb = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
+		// Reduce the average by the appropriate factor, and increment the measurement counter.
+		averageMemoryUsageInKb *= (double) nrMemoryMeasurements / ++nrMemoryMeasurements;
+		// Divide the current memory usage by the number of measurements.
+		double inc = currentlyInUseMemoryInKb / (double) nrMemoryMeasurements;
+		// Increase the average memory usage by the appropriate amount.
+		averageMemoryUsageInKb += inc;
+	}
+	
+	/** Writes the average memory usage of the JVM to the log. */
+	public static void logMemoryUsage() {
+		log.info("Average memory usage (kB): {}", averageMemoryUsageInKb);
 	}
 }
