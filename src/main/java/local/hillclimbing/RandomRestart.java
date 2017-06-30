@@ -20,8 +20,8 @@ public class RandomRestart<S extends State<S>> {
 	/** The number of consecutive hill-climbing runs that have been performed, including the currently running one. */
 	int nrIterationsPerformed;
 	/**
-	 * The acceptable margin between the quality score of an end state and the best possible score for the employed heuristic (as defined by
-	 * {@link Heuristic#getBestPossibleScore()}). If the end state of an iteration has a score closer than this to the optimal score, the algorithm will stop.
+	 * The acceptable margin between the quality score of an end state and the best possible score for the employed heuristic. If the end state of an iteration has a score closer
+	 * than this to the optimal score, the algorithm will stop.
 	 */
 	private final double qualityMargin;
 	/** The maximum number of consecutive moves a single iteration of the algorithm is allowed to make among states with the same quality. */
@@ -52,7 +52,8 @@ public class RandomRestart<S extends State<S>> {
 			// Randomly create a start state for this iteration, and perform a steepest ascent hill climbing search starting from this state.
 			SteepestAscent<S> search = new SteepestAscent<>(stateConstructor.get(), heuristic, maximumNrPlateauMoves);
 			currentEndState = search.run();
-		} while (currentEndState.getQualityScore() < heuristic.getBestPossibleScore() - qualityMargin);
+		// Stop iterating if the end state is within the stated quality margin of the heuristic's optimal score.
+		} while (!heuristic.determineIsOptimalScore(currentEndState.getQualityScore(), qualityMargin));
 		
 		log.info("Stopped after {} iterations.", nrIterationsPerformed);
 		return currentEndState;

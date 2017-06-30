@@ -6,6 +6,7 @@ import local.queens.State;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import util.Util;
 
 public class HillClimbingTest {
 	@Test
@@ -27,7 +28,7 @@ public class HillClimbingTest {
 		for (int testIteration = 0; testIteration < 10; testIteration++) {
 			RandomRestart<State> searchWithMaxIterations = new RandomRestart<>(heuristic, null, qualityMargin, 0);
 			State state = searchWithMaxIterations.run(() -> new State(4));
-			Assert.assertTrue(heuristic.determineQualityScore(state) <= heuristic.getBestPossibleScore() + qualityMargin + .0001);
+			Assert.assertTrue(heuristic.determineIsOptimalScore(heuristic.determineQualityScore(state), qualityMargin));
 		}
 	}
 	

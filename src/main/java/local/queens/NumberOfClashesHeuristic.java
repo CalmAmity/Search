@@ -1,9 +1,14 @@
 package local.queens;
 
 import core.Heuristic;
+import util.Util;
 
 /** Implements the heuristic function that checks the number of pairs of queens that threaten each other. */
 public class NumberOfClashesHeuristic extends Heuristic<State> {
+	public NumberOfClashesHeuristic() {
+		super(0);
+	}
+	
 	@Override
 	protected double estimateQualityScore(State state) {
 		double numberOfClashes = 0;
@@ -20,10 +25,5 @@ public class NumberOfClashesHeuristic extends Heuristic<State> {
 		
 		// The quality of the state is the number of clashes, negative.
 		return -numberOfClashes;
-	}
-	
-	@Override
-	public double getBestPossibleScore() {
-		return 0;
 	}
 }

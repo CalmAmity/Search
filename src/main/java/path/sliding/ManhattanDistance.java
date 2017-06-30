@@ -5,6 +5,10 @@ import util.Point;
 
 /** Implements the Manhattan distance heuristic for sliding puzzles. */
 public class ManhattanDistance extends Heuristic<State> {
+	public ManhattanDistance() {
+		super(0);
+	}
+	
 	@Override
 	protected double estimateQualityScore(State state) {
 		int nrTiles = state.getWidth() * state.getHeight();
@@ -20,10 +24,5 @@ public class ManhattanDistance extends Heuristic<State> {
 		}
 		// The quality of the state is the negative Manhattan distance.
 		return -totalDistance;
-	}
-	
-	@Override
-	public double getBestPossibleScore() {
-		return 0;
 	}
 }
