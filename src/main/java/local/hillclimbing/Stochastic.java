@@ -49,6 +49,11 @@ public class Stochastic<S extends State<S>> extends AbstractHillClimbing<S> {
 		return nonDownhillMoves.get(selectedStateIndex);
 	}
 	
+	@Override
+	protected void logStatus() {
+		log.debug("Current state quality is {}.", currentState.getQualityScore());
+	}
+	
 	/**
 	 * Determines individual non-negative weights for every state in {@code states}. The function from a state's quality to its weight is monotonic.
 	 * @param states The list of states to determine weights for.

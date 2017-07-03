@@ -33,4 +33,9 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 		
 		return newState;
 	}
+	
+	@Override
+	protected void logStatus() {
+		log.debug("Current state quality is {}.", currentState.getQualityScore());
+	}
 }

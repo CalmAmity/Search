@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import util.Util;
 
 /**
- * An abstract superclass for all hill-climbing algorithms. Simply implement {@link #determineSuccessorState(List)} and you're good to go!
+ * An abstract superclass for single-state hill-climbing algorithms. Simply implement {@link #determineSuccessorState(List)} and you're good to go!
  * @param <S> The type of state that defines the state space.
  */
 public abstract class AbstractHillClimbing<S extends State<S>> {
-	private static Logger log = LoggerFactory.getLogger(AbstractHillClimbing.class);
+	protected static Logger log = LoggerFactory.getLogger(AbstractHillClimbing.class);
 	/** The best state that has been found. The next step will be performed from this state. */
 	protected S currentState;
 	/** The heuristic used to judge the quality of states. */
@@ -28,7 +28,6 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	protected boolean allowDownhillMoves;
 	
 	/**
-	 * Constructs a new state object.
 	 * @param startState The state from which the algorithm should start searching.
 	 * @param heuristic The heuristic that should be used to judge the quality of states.
 	 * @param maximumNrPlateauMoves The maximum number of consecutive moves the algorithm is allowed to make among states with the same quality.
@@ -85,16 +84,18 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	 */
 	protected abstract S determineSuccessorState(List<S> possibleSuccessors);
 	
+	/** Writes the status of the algorithm to the log. */
+	protected abstract void logStatus();
+	
 	/**
 	 * Runs the algorithm to completion.
 	 * @return The best state that could be found.
 	 */
 	public S run() {
+		log.info("Starting run of {}.", this.getClass().getSimpleName());
 		while (true) {
-			log.debug("Current state:\n{}", currentState);
-			if (!log.isDebugEnabled()) {
-				log.info("Current state quality: {}", currentState.getQualityScore());
-			}
+			log.trace("Current state:\n{}", currentState);
+			logStatus();
 			// Perform the next step.
 			S nextState = performStep();
 			if (nextState == null) {
