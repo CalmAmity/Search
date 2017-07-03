@@ -1,12 +1,12 @@
 package core;
 
-import path.State;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import path.State;
 
 /** Implements a graph-based form of the depth-first search algorithm. */
 public class DepthFirstGraph<S extends State<S>> {
@@ -34,7 +34,10 @@ public class DepthFirstGraph<S extends State<S>> {
 				continue;
 			}
 			// Determine the available actions, and add each of their resulting states to the frontier.
-			frontier.addAll(currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList()));
+			Iterator<Action<S>> availableActionsIterator = currentState.createAvailableActionsIterator();
+			while (availableActionsIterator.hasNext()) {
+				frontier.add(availableActionsIterator.next().getResultingState());
+			}
 		} while (!currentState.isGoalState());
 		
 		return currentState;

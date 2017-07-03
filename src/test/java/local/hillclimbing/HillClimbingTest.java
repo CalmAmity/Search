@@ -6,7 +6,6 @@ import local.queens.State;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import util.Util;
 
 public class HillClimbingTest {
 	@Test
@@ -52,15 +51,24 @@ public class HillClimbingTest {
 	public void simulatedAnnealing() {
 		State state = new State(8);
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
-		SimulatedAnnealing<State> climb = new SimulatedAnnealing<>(state, heuristic, .05);
+		SimulatedAnnealing<State> climb = new SimulatedAnnealing<>(state, heuristic, .05, 100);
 		climb.run();
 	}
 	
 	@Ignore
 	@Test
-	public void big() {
+	public void randomRestartBig() {
 		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
 		RandomRestart<State> searchWithMaxIterations = new RandomRestart<>(heuristic, 100, 0, 20);
 		searchWithMaxIterations.run(() -> new State(88));
+	}
+	
+	@Ignore
+	@Test
+	public void simulatedAnnealingBig() {
+		State state = new State(888);
+		Heuristic<State> heuristic = new NumberOfClashesHeuristic();
+		SimulatedAnnealing<State> climb = new SimulatedAnnealing<>(state, heuristic, 1d / 5000, 1000);
+		climb.run();
 	}
 }

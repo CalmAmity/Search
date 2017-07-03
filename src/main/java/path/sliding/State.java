@@ -1,10 +1,10 @@
 package path.sliding;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import core.Action;
 import org.apache.commons.lang3.StringUtils;
@@ -81,12 +81,40 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public Collection<Action<State>> determineAvailableActions() {
-		List<Move> possibleMoves = determinePossibleMoves();
-		List<Action<State>> actions = new ArrayList<>(possibleMoves.size());
-		actions.addAll(possibleMoves.stream().map(move -> new Action<>(performMove(move), 1)).collect(Collectors.toList()));
-		
-		return actions;
+	public Iterator<Action<State>> createAvailableActionsIterator() {
+		return new Iterator<Action<State>>() {
+			/** The list of all moves that are available in the current state. */
+			final List<Move> possibleMoves = determinePossibleMoves();
+			/** The index of the next move in {@link #possibleMoves}. */
+			int nextMoveIndex;
+			
+			@Override
+			public boolean hasNext() {
+				return nextMoveIndex < possibleMoves.size();
+			}
+			
+			@Override
+			public Action<State> next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException("All available moves have been checked.");
+				}
+				
+				// Get the next move and use it to create an action. Also increment the connection index!
+				Move availableMove = possibleMoves.get(nextMoveIndex++);
+				return new Action<>(performMove(availableMove), 1);
+			}
+		};
+	}
+	
+	@Override
+	public Action<State> randomlySelectAvailableAction() {
+		Random rng = new Random();
+		// Determine the moves available from this state.
+		final List<Move> possibleMoves = determinePossibleMoves();
+		// Select a random move from this list.
+		Move availableMove = possibleMoves.get(rng.nextInt(possibleMoves.size()));
+		// Use this move to create an action.
+		return new Action<>(performMove(availableMove), 1);
 	}
 	
 	public Integer findTileAt(int x, int y) {
@@ -125,7 +153,7 @@ public class State implements path.State<State> {
 	}
 	
 	/**
-	 * Performs the specified move from the current state.
+	 * Performs the specified move from the current state. This state object is not changed by this operation.
 	 * @param move The move to be made.
 	 * @return A new {@link State} object representing the state after the move.
 	 */

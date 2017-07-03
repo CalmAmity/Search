@@ -1,8 +1,8 @@
 package local.hillclimbing;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Iterator;
 
+import core.Action;
 import core.Heuristic;
 import core.State;
 
@@ -13,16 +13,17 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 	}
 	
 	@Override
-	protected S determineSuccessorState(List<S> possibleSuccessors) {
-		// Randomise the order of the list in order to prevent walking around a plateau in tiny circles.
-		Collections.shuffle(possibleSuccessors);
-		// Find the highest-quality successor state.
+	protected S determineSuccessorState() {
 		S newState = currentState;
-		for (S successorState : possibleSuccessors) {
+		int nrPossibleSuccessorsInspected = 0;
+		Iterator<Action<S>> possibleSuccessors = currentState.createAvailableActionsIterator();
+		while (possibleSuccessors.hasNext()) {
+			S successorState = possibleSuccessors.next().getResultingState();
 			if (heuristic.determineQualityScore(successorState) >= newState.getQualityScore()) {
 				// This successor state is of a higher quality than the current state. Make this the new state.
 				newState = successorState;
 			}
+			log.trace("{} possible successors checked.", ++nrPossibleSuccessorsInspected);
 		}
 		
 		if (newState.getQualityScore() < currentState.getQualityScore()) {
@@ -36,6 +37,7 @@ public class SteepestAscent<S extends State<S>> extends AbstractHillClimbing<S> 
 	
 	@Override
 	protected void logStatus() {
+		log.trace("Current state:\n{}", currentState);
 		log.debug("Current state quality is {}.", currentState.getQualityScore());
 	}
 }

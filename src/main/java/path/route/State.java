@@ -1,9 +1,11 @@
 package path.route;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Random;
 
 import core.Action;
+import util.Vertex;
 
 /** Represents a state in the route search problem. */
 public class State implements path.State<State> {
@@ -27,9 +29,36 @@ public class State implements path.State<State> {
 	}
 	
 	@Override
-	public Collection<Action<State>> determineAvailableActions() {
-		// For every connection that this location has to another, create a new state based on that destination location.
-		return currentLocation.getConnections().stream().map(connection -> new Action<>(new State(connection.getDestination()), connection.getCost())).collect(Collectors.toList());
+	public Iterator<Action<State>> createAvailableActionsIterator() {
+		return new Iterator<Action<State>>() {
+			/** The current index of this iterator in the list of connections available from the current location. */
+			private int nextConnectionIndex;
+			
+			@Override
+			public boolean hasNext() {
+				return nextConnectionIndex < currentLocation.getConnections().size();
+			}
+			
+			@Override
+			public Action<State> next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException("All outgoing connections have been checked.");
+				}
+				
+				// Get the next connection and use it to create an action. Also increment the connection index!
+				Vertex<Location> outgoingConnection = currentLocation.getConnections().get(nextConnectionIndex++);
+				return new Action<>(new State(outgoingConnection.getDestination()), outgoingConnection.getCost());
+			}
+		};
+	}
+	
+	@Override
+	public Action<State> randomlySelectAvailableAction() {
+		// Select a random outgoing connection from this location.
+		Random rng = new Random();
+		Vertex<Location> outgoingConnection = currentLocation.getConnections().get(rng.nextInt(currentLocation.getConnections().size()));
+		// Use the connection to create an action.
+		return new Action<>(new State(outgoingConnection.getDestination()), outgoingConnection.getCost());
 	}
 	
 	@Override

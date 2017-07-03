@@ -1,9 +1,5 @@
 package local.hillclimbing;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import core.Action;
 import core.Heuristic;
 import core.State;
 import org.slf4j.Logger;
@@ -11,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import util.Util;
 
 /**
- * An abstract superclass for single-state hill-climbing algorithms. Simply implement {@link #determineSuccessorState(List)} and you're good to go!
+ * An abstract superclass for single-state hill-climbing algorithms. Simply implement {@link #determineSuccessorState()} and you're good to go!
  * @param <S> The type of state that defines the state space.
  */
 public abstract class AbstractHillClimbing<S extends State<S>> {
@@ -49,9 +45,8 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 		}
 		
 		Util.measureMemoryUse();
-		// Create a complete list of possible successor states.
-		List<S> successorStates = currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList());
-		S selectedSuccessor = determineSuccessorState(successorStates);
+		// Determine the successor state.
+		S selectedSuccessor = determineSuccessorState();
 		Util.measureMemoryUse();
 		
 		if (selectedSuccessor == null) {
@@ -79,10 +74,9 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	
 	/**
 	 * Determines the next state to step to.
-	 * @param possibleSuccessors The complete list of available successor states.
 	 * @return The new state, or {@code null} if the algorithm has finished (meaning {@code #currentState} is the final state).
 	 */
-	protected abstract S determineSuccessorState(List<S> possibleSuccessors);
+	protected abstract S determineSuccessorState();
 	
 	/** Writes the status of the algorithm to the log. */
 	protected abstract void logStatus();
@@ -94,7 +88,6 @@ public abstract class AbstractHillClimbing<S extends State<S>> {
 	public S run() {
 		log.info("Starting run of {}.", this.getClass().getSimpleName());
 		while (true) {
-			log.trace("Current state:\n{}", currentState);
 			logStatus();
 			// Perform the next step.
 			S nextState = performStep();

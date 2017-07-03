@@ -2,7 +2,6 @@ package local.hillclimbing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import core.Heuristic;
 import core.State;
@@ -18,11 +17,12 @@ public class Stochastic<S extends State<S>> extends AbstractHillClimbing<S> {
 	}
 	
 	@Override
-	protected S determineSuccessorState(List<S> possibleSuccessors) {
+	protected S determineSuccessorState() {
 		// Start by collecting only those successors that have an equal or better quality compared to the current state.
-		List<S> nonDownhillMoves = possibleSuccessors.stream()
-				.filter(state -> heuristic.determineQualityScore(state) >= heuristic.determineQualityScore(currentState) - Util.ERROR_MARGIN_FOR_FLOAT_COMPARISON)
-				.collect(Collectors.toList());
+		List<S> nonDownhillMoves = new ArrayList<>();
+//				possibleSuccessors.stream()
+//				.filter(state -> heuristic.determineQualityScore(state) >= heuristic.determineQualityScore(currentState) - Util.ERROR_MARGIN_FOR_FLOAT_COMPARISON)
+//				.collect(Collectors.toList());
 		
 		if (nonDownhillMoves.isEmpty()) {
 			// All possible successors are downhill moves. These are not allowed, which means the search has finished. Return null to signify this.
@@ -51,6 +51,7 @@ public class Stochastic<S extends State<S>> extends AbstractHillClimbing<S> {
 	
 	@Override
 	protected void logStatus() {
+		log.trace("Current state:\n{}", currentState);
 		log.debug("Current state quality is {}.", currentState.getQualityScore());
 	}
 	

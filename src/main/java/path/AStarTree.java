@@ -1,6 +1,6 @@
 package path;
 
-import java.util.Collection;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -56,14 +56,14 @@ public class AStarTree<S extends State<S>> {
 			return false;
 		}
 		
-		// Create a collection of all actions available from the current state.
-		Collection<Action<S>> availableActions = currentState.determineAvailableActions();
-		for (Action<S> action : availableActions) {
+		Iterator<Action<S>> possibleSuccessors = currentState.createAvailableActionsIterator();
+		while (possibleSuccessors.hasNext()) {
+			Action<S> action = possibleSuccessors.next();
+			S successorState = action.getResultingState();
 			// Update this successor state with the cost of reaching it and add it to the frontier.
-			S resultingState = action.getResultingState();
-			resultingState.setCost(action.getCost());
-			heuristic.determineQualityScore(resultingState);
-			frontier.add(resultingState);
+			successorState.setCost(action.getCost());
+			heuristic.determineQualityScore(successorState);
+			frontier.add(successorState);
 		}
 		
 		return true;

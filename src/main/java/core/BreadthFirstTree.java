@@ -1,10 +1,10 @@
 package core;
 
-import path.State;
-
 import java.util.ArrayDeque;
+import java.util.Iterator;
 import java.util.Queue;
-import java.util.stream.Collectors;
+
+import path.State;
 
 /** Implements a simple form of the tree-based breadth-first search algorithm. */
 public class BreadthFirstTree<S extends State<S>> {
@@ -25,7 +25,10 @@ public class BreadthFirstTree<S extends State<S>> {
 		do {
 			currentState = frontier.poll();
 			// Determine the available actions in the current state and add their resulting states to the frontier.
-			frontier.addAll(currentState.determineAvailableActions().stream().map(Action::getResultingState).collect(Collectors.toList()));
+			Iterator<Action<S>> availableActionsIterator = currentState.createAvailableActionsIterator();
+			while (availableActionsIterator.hasNext()) {
+				frontier.add(availableActionsIterator.next().getResultingState());
+			}
 		} while (!currentState.isGoalState());
 		
 		return currentState;

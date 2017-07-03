@@ -1,8 +1,8 @@
 package local.queens;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import core.Action;
@@ -70,22 +70,83 @@ public class State implements core.State<State> {
 		return verticalDistance == 0 || horizontalDistance == verticalDistance;
 	}
 	
-	@Override
-	public Collection<Action<State>> determineAvailableActions() {
-		Collection<Action<State>> availableActions = new ArrayList<>();
-		
-		for (int column = 0; column < board.length; column++) {
-			for (int row = 0; row < board.length; row++) {
-				// Move the queen in the current column to the current row. If this results in a different board configuration, create a new action for it and add it to the list.
-				if (board[column] != row) {
-					int[] successorBoard = board.clone();
-					successorBoard[column] = row;
-					availableActions.add(new Action<State>(new State(successorBoard), 0));
+	/**
+	 * Creates an {@link Iterator} that provides all states 'reachable' from this one. In this case, a 'reachable' state is a state produced by moving a single queen to another
+	 * position in the same column.
+	 */
+	public Iterator<Action<State>> createAvailableActionsIterator() {
+		return new Iterator<Action<State>>() {
+			// The column that the cursor is currently on.
+			private int column;
+			// The row that the cursor is currently on.
+			private int row = -1;
+			
+			@Override
+			public boolean hasNext() {
+				// Check if there is an open position after the cursor.
+				if (column == board.length - 1
+						&& row == board.length - 2
+						&& board[column] == board.length - 1) {
+					// This is a special case: the queen in the last column is also in the last row. The cursor is on the position immediately preceding this queen (last column,
+					// second-to-last row) so no more open positions are available.
+					return false;
+				}
+				
+				// In general, another successor state is available if the cursor is not on the very last space of the board.
+				return column < board.length - 1 || row < board.length - 1;
+			}
+			
+			@Override
+			public Action<State> next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException("No next successor available.");
+				}
+				
+				// Find the next open position on the board.
+				findNextOpenPosition();
+				// Move the queen in the current column to the open position, which will result in a different board configuration. Create a new action for it and add it to the
+				// list.
+				int[] successorBoard = board.clone();
+				successorBoard[column] = row;
+				return new Action<>(new State(successorBoard), 0);
+			}
+			
+			/** Moves the cursor to the next open position on the board. */
+			private void findNextOpenPosition() {
+				do {
+					nextPosition();
+					// Keep going until the current position does not contain an queen.
+				} while (board[column] == row);
+			}
+			
+			/** Moves the cursor to the next position on the board. */
+			private void nextPosition() {
+				row++;
+				if (row >= board.length) {
+					row = 0;
+					column++;
 				}
 			}
+		};
+	}
+	
+	@Override
+	public Action<State> randomlySelectAvailableAction() {
+		Random rng = new Random();
+		
+		// Randomly select a queen to move.
+		int column = rng.nextInt(board.length);
+		// Randomly select a row to move her to.
+		int row = rng.nextInt(board.length - 1);
+		if (row >= board[column]) {
+			// The selected row is equal to or greater than the row the selected queen is in. Move down one row to compensate for this.
+			row++;
 		}
 		
-		return availableActions;
+		// Clone the board and move the queen to her new position on this board.
+		int[] successorBoard = board.clone();
+		successorBoard[column] = row;
+		return new Action<>(new State(successorBoard), 0);
 	}
 	
 	@Override

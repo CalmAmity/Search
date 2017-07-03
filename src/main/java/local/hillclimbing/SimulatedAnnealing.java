@@ -1,6 +1,5 @@
 package local.hillclimbing;
 
-import java.util.List;
 import java.util.Random;
 
 import core.Heuristic;
@@ -27,26 +26,21 @@ public class SimulatedAnnealing<S extends State<S>> extends AbstractHillClimbing
 	}
 	
 	@Override
-	protected S determineSuccessorState(List<S> possibleSuccessors) {
+	protected S determineSuccessorState() {
 		// Decrease the temperature.
 		temperature -= coolingRate;
 		
 		Random rng = new Random();
 		int nrSuccessorsChecked = 0;
 		while (true) {
-			if (possibleSuccessors.isEmpty()) {
-				// There are no more possible successors; return null to signify that the search has ended.
-				return null;
-			}
-			
 			nrSuccessorsChecked++;
 			if (nrSuccessorsChecked >= maximumSuccessorChecks) {
 				// No acceptable successors were found before the maximum number of checks was reached. Return null to signify that the search has ended.
 				return null;
 			}
 			
-			// Choose a prospective successor randomly from all possible successors, and remove it from the list.
-			S possibleSuccessor = possibleSuccessors.remove(rng.nextInt(possibleSuccessors.size()));
+			// Choose a prospective successor randomly from all possible successors.
+			S possibleSuccessor = currentState.randomlySelectAvailableAction().getResultingState();
 			if (heuristic.determineQualityScore(possibleSuccessor) > heuristic.determineQualityScore(currentState)
 					|| rng.nextDouble() < temperature) {
 				// Either this successor is superior to the current state, or choosing an inferior successor is acceptable. Accept it as the next state.
@@ -57,6 +51,7 @@ public class SimulatedAnnealing<S extends State<S>> extends AbstractHillClimbing
 	
 	@Override
 	protected void logStatus() {
+		log.trace("Current state:\n{}", currentState);
 		log.debug("Current state quality is {}, current temparture is {}.", currentState.getQualityScore(), temperature);
 	}
 }
