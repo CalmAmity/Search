@@ -1,6 +1,7 @@
 package local.queens;
 
 import core.Heuristic;
+import nl.calmamity.search.local.queens.NumberOfClashesHeuristic;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

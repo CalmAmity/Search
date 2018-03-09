@@ -1,8 +1,8 @@
 package local.hillclimbing;
 
 import core.Heuristic;
-import local.queens.NumberOfClashesHeuristic;
 import local.queens.State;
+import nl.calmamity.search.local.queens.NumberOfClashesHeuristic;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

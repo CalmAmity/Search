@@ -58,7 +58,7 @@ public class State implements core.State<State> {
 	 * @param column2 The column containing the other queen.
 	 * @return {@code true} if the two indicated queens are in such a relative position that they threaten each other.
 	 */
-	boolean queensAreClashing(int column1, int column2) {
+	public boolean queensAreClashing(int column1, int column2) {
 		// Calculate the horizontal and vertical distances between the queens in the two columns.
 		int horizontalDistance = Math.abs(column1 - column2);
 		int verticalDistance = Math.abs(board[column1] - board[column2]);
