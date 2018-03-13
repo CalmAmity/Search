@@ -1,4 +1,4 @@
-package nl.calmamity.search.supereffective
+package nl.calmamity.search.local.supereffective
 
 object TypeComparator {
 	val typeMatrix: Map[Type.Value, Map[Type.Value, Effectiveness.Value]] = Map(

@@ -1,4 +1,4 @@
-package nl.calmamity.search.supereffective
+package nl.calmamity.search.local.supereffective
 
 object Type extends Enumeration {
 	val
