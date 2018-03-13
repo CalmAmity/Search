@@ -41,6 +41,8 @@ case class Team(members: Seq[SatchelCreature]) extends State[Team] {
 		val membersOfNewTeam = members.updated(mutatedMemberIndex, mutationResult)
 		new Action[Team](Team(membersOfNewTeam), 0)
 	}
+	
+	override def toString: String = s"Team(${members.mkString(", ")})"
 }
 
 object Team {

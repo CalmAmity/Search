@@ -85,6 +85,16 @@ case class SatchelCreature(
 				Some(manoeuvreTypes(someOtherIndex - 2))
 		}
 	}
+	
+	override def toString: String = {
+		val secondTypeString = secondType match {
+			case Some(typeValue) =>
+				s"/$typeValue"
+			case None =>
+				""
+		}
+		s"Creature($firstType$secondTypeString, Manoeuvres(${manoeuvreTypes.mkString(",")}))"
+	}
 }
 
 object SatchelCreature {

@@ -17,13 +17,20 @@ class EffectivenessHeuristic extends Heuristic[Team] {
 			}
 	
 	override def estimateQualityScore(team: Team): Double = {
-		team.members
-			.flatMap {
-				member =>
-					allTypeCombinations.map {
-						typeCombination =>
-							determineEffectivenessScore(member, typeCombination)
-					}
+		// Check all possible type combinations for opponents.
+		allTypeCombinations
+			.map {
+				// For each possible opposing type combination:
+				opposingTypeCombination =>
+					// Check all members of the team...
+					team.members
+						.map {
+							// ...determine the effectiveness score of this member against the opposing combination...
+							member =>
+								determineEffectivenessScore(member, opposingTypeCombination)
+						}
+						// ...and take the highest score among team members.
+						.max
 			}
 			.sum
 	}
