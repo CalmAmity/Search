@@ -1,5 +1,7 @@
 package core;
 
+import nl.calmamity.search.core.State;
+
 /**
  * Defines an action that can be taken to move to another state.
  * @param <S> The type of state that this action will result in.

@@ -1,10 +1,11 @@
 package nl.calmamity.search.local.queens
 
-import core.Heuristic
-import local.queens.State
+import nl.calmamity.search.core.Heuristic
 
 /** Implements the heuristic function that checks the number of pairs of queens that threaten each other. */
-class NumberOfClashesHeuristic extends Heuristic[State](0) {
+class NumberOfClashesHeuristic extends Heuristic[State] {
+	override val optimalScore: Double = 0
+	
 	override def estimateQualityScore(state: State): Double = {
 		// A higher number of clashes means a lower quality, so multiply the number of clashes by -1.
 		-1 *

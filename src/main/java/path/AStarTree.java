@@ -1,11 +1,12 @@
 package path;
 
-import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import core.Action;
-import core.Heuristic;
+import nl.calmamity.search.core.Heuristic;
+import nl.calmamity.search.path.State;
+import scala.collection.Iterator;
 
 /** Implements the A* path-finding algorithm. */
 public class AStarTree<S extends State<S>> {
@@ -20,8 +21,8 @@ public class AStarTree<S extends State<S>> {
 		frontier = new PriorityQueue<>(
 				(state1, state2) -> {
 					// Determine the heuristic cost of the two states, which is equal to the actual cost of reaching the state, plus the negative of the quality score.
-					double state1HeuristicCost = state1.getCost() + -state1.getQualityScore();
-					double state2HeuristicCost = state2.getCost() + -state2.getQualityScore();
+					double state1HeuristicCost = state1.cost() + -heuristic.determineQualityScore(state1);
+					double state2HeuristicCost = state2.cost() + -heuristic.determineQualityScore(state2);
 					double difference = state1HeuristicCost - state2HeuristicCost;
 					if (difference < 0) {
 						// State 1 has a lower heuristic cost than state 2.
@@ -50,7 +51,7 @@ public class AStarTree<S extends State<S>> {
 		S currentState = frontier.poll();
 		if (currentState.isGoalState()) {
 			// This state is a goal state.
-			double finalCost = currentState.getCost();
+			double finalCost = currentState.cost();
 			PathSearchUtil.printPathToState(currentState);
 			System.out.println("FINAL COST: " + finalCost);
 			return false;
@@ -60,8 +61,6 @@ public class AStarTree<S extends State<S>> {
 		while (possibleSuccessors.hasNext()) {
 			Action<S> action = possibleSuccessors.next();
 			S successorState = action.getResultingState();
-			// Update this successor state with the cost of reaching it and add it to the frontier.
-			successorState.setCost(action.getCost());
 			heuristic.determineQualityScore(successorState);
 			frontier.add(successorState);
 		}
@@ -73,7 +72,7 @@ public class AStarTree<S extends State<S>> {
 	public String totalEstimatedCosts() {
 		StringBuilder result = new StringBuilder("[ ");
 		for (S state : frontier) {
-			double estimatedTotalCostForState = state.getCost() + state.getQualityScore();
+			double estimatedTotalCostForState = state.cost() + heuristic.determineQualityScore(state);
 			result.append(estimatedTotalCostForState).append(" ");
 		}
 		return result.append("]").toString();
