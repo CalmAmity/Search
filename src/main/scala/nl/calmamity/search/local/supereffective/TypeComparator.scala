@@ -1,166 +1,166 @@
 package nl.calmamity.search.local.supereffective
 
 object TypeComparator {
-	val typeMatrix: Map[Type.Value, Map[Type.Value, Effectiveness.Value]] = Map(
+	val typeMatrix: Map[Type.Value, Map[Type.Value, Effectiveness]] = Map(
 		Type.Normal -> Map(
-			  Type.Rock		-> Effectiveness.NotVery
-			, Type.Ghost	-> Effectiveness.DoesNotAffect
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Rock		-> NotVery
+			, Type.Ghost	-> DoesNotAffect
+			, Type.Steel	-> NotVery
 		)
 		, Type.Fire -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Water	-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.Super
-			, Type.Ice		-> Effectiveness.Super
-			, Type.Bug		-> Effectiveness.Super
-			, Type.Rock		-> Effectiveness.NotVery
-			, Type.Dragon	-> Effectiveness.NotVery
-			, Type.Steel	-> Effectiveness.Super
+			  Type.Fire		-> NotVery
+			, Type.Water	-> NotVery
+			, Type.Grass	-> Super
+			, Type.Ice		-> Super
+			, Type.Bug		-> Super
+			, Type.Rock		-> NotVery
+			, Type.Dragon	-> NotVery
+			, Type.Steel	-> Super
 		)
 		, Type.Water -> Map(
-			  Type.Fire		-> Effectiveness.Super
-			, Type.Water	-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.Super
-			, Type.Rock		-> Effectiveness.Super
-			, Type.Dragon	-> Effectiveness.NotVery
+			  Type.Fire		-> Super
+			, Type.Water	-> NotVery
+			, Type.Grass	-> NotVery
+			, Type.Ground	-> Super
+			, Type.Rock		-> Super
+			, Type.Dragon	-> NotVery
 		)
 		, Type.Electric -> Map(
-			  Type.Water	-> Effectiveness.Super
-			, Type.Electric	-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.DoesNotAffect
-			, Type.Flying	-> Effectiveness.Super
-			, Type.Dragon	-> Effectiveness.NotVery
+			  Type.Water	-> Super
+			, Type.Electric	-> NotVery
+			, Type.Grass	-> NotVery
+			, Type.Ground	-> DoesNotAffect
+			, Type.Flying	-> Super
+			, Type.Dragon	-> NotVery
 		)
 		, Type.Grass -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Water	-> Effectiveness.Super
-			, Type.Grass	-> Effectiveness.NotVery
-			, Type.Poison	-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.Super
-			, Type.Flying	-> Effectiveness.NotVery
-			, Type.Bug		-> Effectiveness.NotVery
-			, Type.Rock		-> Effectiveness.Super
-			, Type.Dragon	-> Effectiveness.NotVery
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Fire		-> NotVery
+			, Type.Water	-> Super
+			, Type.Grass	-> NotVery
+			, Type.Poison	-> NotVery
+			, Type.Ground	-> Super
+			, Type.Flying	-> NotVery
+			, Type.Bug		-> NotVery
+			, Type.Rock		-> Super
+			, Type.Dragon	-> NotVery
+			, Type.Steel	-> NotVery
 		)
 		, Type.Ice -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Water	-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.Super
-			, Type.Ice		-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.Super
-			, Type.Flying	-> Effectiveness.Super
-			, Type.Dragon	-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Fire		-> NotVery
+			, Type.Water	-> NotVery
+			, Type.Grass	-> Super
+			, Type.Ice		-> NotVery
+			, Type.Ground	-> Super
+			, Type.Flying	-> Super
+			, Type.Dragon	-> Super
+			, Type.Steel	-> NotVery
 		)
 		, Type.Fighting -> Map(
-			  Type.Normal	-> Effectiveness.Super
-			, Type.Ice		-> Effectiveness.Super
-			, Type.Poison	-> Effectiveness.NotVery
-			, Type.Flying	-> Effectiveness.NotVery
-			, Type.Psychic	-> Effectiveness.NotVery
-			, Type.Bug		-> Effectiveness.NotVery
-			, Type.Rock		-> Effectiveness.Super
-			, Type.Ghost	-> Effectiveness.DoesNotAffect
-			, Type.Dark		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.Super
-			, Type.Fairy	-> Effectiveness.NotVery
+			  Type.Normal	-> Super
+			, Type.Ice		-> Super
+			, Type.Poison	-> NotVery
+			, Type.Flying	-> NotVery
+			, Type.Psychic	-> NotVery
+			, Type.Bug		-> NotVery
+			, Type.Rock		-> Super
+			, Type.Ghost	-> DoesNotAffect
+			, Type.Dark		-> Super
+			, Type.Steel	-> Super
+			, Type.Fairy	-> NotVery
 		)
 		, Type.Poison -> Map(
-			  Type.Grass	-> Effectiveness.Super
-			, Type.Poison	-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.NotVery
-			, Type.Rock		-> Effectiveness.NotVery
-			, Type.Ghost	-> Effectiveness.NotVery
-			, Type.Steel	-> Effectiveness.DoesNotAffect
-			, Type.Fairy	-> Effectiveness.Super
+			  Type.Grass	-> Super
+			, Type.Poison	-> NotVery
+			, Type.Ground	-> NotVery
+			, Type.Rock		-> NotVery
+			, Type.Ghost	-> NotVery
+			, Type.Steel	-> DoesNotAffect
+			, Type.Fairy	-> Super
 		)
 		, Type.Ground -> Map(
-			  Type.Fire		-> Effectiveness.Super
-			, Type.Electric	-> Effectiveness.Super
-			, Type.Grass	-> Effectiveness.NotVery
-			, Type.Poison	-> Effectiveness.Super
-			, Type.Flying	-> Effectiveness.DoesNotAffect
-			, Type.Bug		-> Effectiveness.NotVery
-			, Type.Rock		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.Super
+			  Type.Fire		-> Super
+			, Type.Electric	-> Super
+			, Type.Grass	-> NotVery
+			, Type.Poison	-> Super
+			, Type.Flying	-> DoesNotAffect
+			, Type.Bug		-> NotVery
+			, Type.Rock		-> Super
+			, Type.Steel	-> Super
 		)
 		, Type.Flying -> Map(
-			  Type.Electric	-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.Super
-			, Type.Fighting	-> Effectiveness.Super
-			, Type.Bug		-> Effectiveness.Super
-			, Type.Rock		-> Effectiveness.NotVery
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Electric	-> NotVery
+			, Type.Grass	-> Super
+			, Type.Fighting	-> Super
+			, Type.Bug		-> Super
+			, Type.Rock		-> NotVery
+			, Type.Steel	-> NotVery
 		)
 		, Type.Psychic -> Map(
-			  Type.Fighting	-> Effectiveness.Super
-			, Type.Poison	-> Effectiveness.Super
-			, Type.Psychic	-> Effectiveness.NotVery
-			, Type.Dark		-> Effectiveness.DoesNotAffect
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Fighting	-> Super
+			, Type.Poison	-> Super
+			, Type.Psychic	-> NotVery
+			, Type.Dark		-> DoesNotAffect
+			, Type.Steel	-> NotVery
 		)
 		, Type.Bug -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Grass	-> Effectiveness.Super
-			, Type.Fighting	-> Effectiveness.NotVery
-			, Type.Poison	-> Effectiveness.NotVery
-			, Type.Flying	-> Effectiveness.NotVery
-			, Type.Psychic	-> Effectiveness.Super
-			, Type.Ghost	-> Effectiveness.NotVery
-			, Type.Dark		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
-			, Type.Fairy	-> Effectiveness.NotVery
+			  Type.Fire		-> NotVery
+			, Type.Grass	-> Super
+			, Type.Fighting	-> NotVery
+			, Type.Poison	-> NotVery
+			, Type.Flying	-> NotVery
+			, Type.Psychic	-> Super
+			, Type.Ghost	-> NotVery
+			, Type.Dark		-> Super
+			, Type.Steel	-> NotVery
+			, Type.Fairy	-> NotVery
 		)
 		, Type.Rock -> Map(
-			  Type.Fire		-> Effectiveness.Super
-			, Type.Ice		-> Effectiveness.Super
-			, Type.Fighting	-> Effectiveness.NotVery
-			, Type.Ground	-> Effectiveness.NotVery
-			, Type.Flying	-> Effectiveness.Super
-			, Type.Bug		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Fire		-> Super
+			, Type.Ice		-> Super
+			, Type.Fighting	-> NotVery
+			, Type.Ground	-> NotVery
+			, Type.Flying	-> Super
+			, Type.Bug		-> Super
+			, Type.Steel	-> NotVery
 		)
 		, Type.Ghost -> Map(
-			  Type.Normal	-> Effectiveness.DoesNotAffect
-			, Type.Psychic	-> Effectiveness.Super
-			, Type.Ghost	-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Normal	-> DoesNotAffect
+			, Type.Psychic	-> Super
+			, Type.Ghost	-> Super
+			, Type.Steel	-> NotVery
 		)
 		, Type.Dragon -> Map(
-			  Type.Dragon	-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
-			, Type.Fairy	-> Effectiveness.DoesNotAffect
+			  Type.Dragon	-> Super
+			, Type.Steel	-> NotVery
+			, Type.Fairy	-> DoesNotAffect
 		)
 		, Type.Dark -> Map(
-			  Type.Fighting	-> Effectiveness.NotVery
-			, Type.Psychic	-> Effectiveness.Super
-			, Type.Ghost	-> Effectiveness.Super
-			, Type.Dark		-> Effectiveness.NotVery
-			, Type.Fairy	-> Effectiveness.NotVery
+			  Type.Fighting	-> NotVery
+			, Type.Psychic	-> Super
+			, Type.Ghost	-> Super
+			, Type.Dark		-> NotVery
+			, Type.Fairy	-> NotVery
 		)
 		, Type.Steel -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Water	-> Effectiveness.NotVery
-			, Type.Electric	-> Effectiveness.NotVery
-			, Type.Ice		-> Effectiveness.Super
-			, Type.Rock		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
-			, Type.Fairy	-> Effectiveness.Super
+			  Type.Fire		-> NotVery
+			, Type.Water	-> NotVery
+			, Type.Electric	-> NotVery
+			, Type.Ice		-> Super
+			, Type.Rock		-> Super
+			, Type.Steel	-> NotVery
+			, Type.Fairy	-> Super
 		)
 		, Type.Fairy -> Map(
-			  Type.Fire		-> Effectiveness.NotVery
-			, Type.Fighting	-> Effectiveness.Super
-			, Type.Poison	-> Effectiveness.NotVery
-			, Type.Dragon	-> Effectiveness.Super
-			, Type.Dark		-> Effectiveness.Super
-			, Type.Steel	-> Effectiveness.NotVery
+			  Type.Fire		-> NotVery
+			, Type.Fighting	-> Super
+			, Type.Poison	-> NotVery
+			, Type.Dragon	-> Super
+			, Type.Dark		-> Super
+			, Type.Steel	-> NotVery
 		)
 	)
 
-	def determineEffectiveness(attackingType: Type.Value, defendingType: Type.Value): Effectiveness.Value = {
-		typeMatrix(attackingType).getOrElse(defendingType, Effectiveness.Normal)
+	def determineEffectiveness(attackingType: Type.Value, defendingType: Type.Value): Effectiveness = {
+		typeMatrix(attackingType).getOrElse(defendingType, Regular)
 	}
 }

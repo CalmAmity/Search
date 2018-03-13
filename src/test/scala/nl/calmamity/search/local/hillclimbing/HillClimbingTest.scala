@@ -1,6 +1,7 @@
 package nl.calmamity.search.local.hillclimbing
 
 import nl.calmamity.search.local.queens.{NumberOfClashesHeuristic, State}
+import nl.calmamity.search.local.supereffective.{EffectivenessHeuristic, Team}
 import org.scalatest.FlatSpec
 
 class HillClimbingTest extends FlatSpec {
@@ -32,10 +33,22 @@ class HillClimbingTest extends FlatSpec {
 		searchWithMaxIterations.run(() => State(88))
 	}
 	
+	it should "do something super-effective" in {
+		val randomRestart = new RandomRestart[Team](new EffectivenessHeuristic(), 10, Some(10), 0)
+		randomRestart.run(() => Team(6))
+	}
+	
 	"Steepest ascent" should "climb a single hill" in {
 		val state = State(8)
 		val heuristic = new NumberOfClashesHeuristic()
 		val climb = new SteepestAscent[State](state, heuristic, 100)
+		climb.run()
+	}
+	
+	it should "find the superest effective" in {
+		val team = Team(6)
+		val heuristic = new EffectivenessHeuristic()
+		val climb = new SteepestAscent[Team](team, heuristic, 10)
 		climb.run()
 	}
 	

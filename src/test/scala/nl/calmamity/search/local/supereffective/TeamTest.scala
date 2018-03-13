@@ -5,8 +5,8 @@ import org.scalatest.FlatSpec
 class TeamTest extends FlatSpec {
 	"randomlySelectAvailableAction" should "create a different team" in {
 		val originalTeam = Team(Seq(
-			SatchelCreature(Type.Dragon, Some(Type.Ground), (Type.Electric, Type.Fairy, Type.Fighting, Type.Flying))
-			, SatchelCreature(Type.Grass, None, (Type.Grass, Type.Water, Type.Ghost, Type.Fire))
+			SatchelCreature(Type.Dragon, Some(Type.Ground), Seq(Type.Electric, Type.Fairy, Type.Fighting, Type.Flying))
+			, SatchelCreature(Type.Grass, None, Seq(Type.Grass, Type.Water, Type.Ghost, Type.Fire))
 		))
 		for (_ <- 1 to 1000) {
 			val mutatedTeam = originalTeam.randomlySelectAvailableAction.getResultingState

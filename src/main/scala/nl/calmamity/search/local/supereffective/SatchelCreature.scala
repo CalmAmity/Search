@@ -2,6 +2,7 @@ package nl.calmamity.search.local.supereffective
 
 /**
   * Represents one of the Satchel Creatures.
+ *
   * @param firstType The type of the creature. Each creature has at least one type.
   * @param secondType The optional second type of the creature. Each creature has at most two types.
   * @param manoeuvreTypes The types of the individual manoeuvres the creature can perform. Each creature can have at
@@ -11,8 +12,14 @@ package nl.calmamity.search.local.supereffective
 case class SatchelCreature(
 	firstType: Type.Value
 	, secondType: Option[Type.Value]
-	, manoeuvreTypes: (Type.Value, Type.Value, Type.Value, Type.Value)
+	, manoeuvreTypes: Seq[Type.Value]
 ) {
+	if (manoeuvreTypes.size != 4) {
+		throw new IllegalArgumentException(
+			s"The list of manoeuvre types should have a size of exactly 4. Provided: $manoeuvreTypes"
+		)
+	}
+	
 	def createMutationsIterator(): Iterator[SatchelCreature] = new Iterator[SatchelCreature]() {
 		var currentComponentIndex = 0
 		var alternateTypeValuesForCurrentComponent: Seq[Option[Type.Value]] =
@@ -50,12 +57,8 @@ case class SatchelCreature(
 		SatchelCreature(
 			replaceWithAlternativeTypeIfNecessary(0, Some(firstType)).get
 			, replaceWithAlternativeTypeIfNecessary(SatchelCreature.secondTypeIndex, secondType)
-			, (
-				replaceWithAlternativeTypeIfNecessary(2, Some(manoeuvreTypes._1)).get
-				, replaceWithAlternativeTypeIfNecessary(3, Some(manoeuvreTypes._2)).get
-				, replaceWithAlternativeTypeIfNecessary(4, Some(manoeuvreTypes._3)).get
-				, replaceWithAlternativeTypeIfNecessary(5, Some(manoeuvreTypes._4)).get
-			)
+			, for (componentIndex <- 2 until SatchelCreature.numComponents) yield
+				replaceWithAlternativeTypeIfNecessary(componentIndex, Some(manoeuvreTypes(componentIndex - 2))).get
 		)
 	}
 	
@@ -78,14 +81,8 @@ case class SatchelCreature(
 				Some(firstType)
 			case SatchelCreature.secondTypeIndex =>
 				secondType
-			case 2 =>
-				Some(manoeuvreTypes._1)
-			case 3 =>
-				Some(manoeuvreTypes._2)
-			case 4 =>
-				Some(manoeuvreTypes._3)
-			case 5 =>
-				Some(manoeuvreTypes._4)
+			case someOtherIndex =>
+				Some(manoeuvreTypes(someOtherIndex - 2))
 		}
 	}
 }
@@ -93,4 +90,22 @@ case class SatchelCreature(
 object SatchelCreature {
 	val numComponents = 6
 	val secondTypeIndex = 1
+	val randomNumbers = new scala.util.Random()
+	
+	/** Creates a creature with random types for all components. */
+	def apply(): SatchelCreature = {
+		val firstType = pickRandomType
+		val availableSecondTypes = ((Type.values - firstType).map(Option.apply) + None).toSeq
+		val secondType = availableSecondTypes(randomNumbers.nextInt(availableSecondTypes.size))
+		SatchelCreature(
+			firstType
+			, secondType
+			, Seq(pickRandomType, pickRandomType, pickRandomType, pickRandomType)
+		)
+	}
+	
+	def pickRandomType: Type.Value = {
+		val typeIndex = randomNumbers.nextInt(Type.values.size)
+		Type.values.toSeq(typeIndex)
+	}
 }

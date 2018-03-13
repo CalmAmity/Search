@@ -42,3 +42,9 @@ case class Team(members: Seq[SatchelCreature]) extends State[Team] {
 		new Action[Team](Team(membersOfNewTeam), 0)
 	}
 }
+
+object Team {
+	def apply(numMembers: Int): Team = {
+		Team(for (_ <- 1 to numMembers) yield SatchelCreature())
+	}
+}
