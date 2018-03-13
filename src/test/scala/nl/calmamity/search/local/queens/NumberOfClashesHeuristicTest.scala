@@ -22,6 +22,6 @@ class NumberOfClashesHeuristicTest extends FlatSpec {
 		
 		// Create a goal state and determine its quality score.
 		val state2 = State(Seq(4, 2, 0, 6, 1, 7, 5, 3))
-		assert(heuristic.determineQualityScore(state2) == 1)
+		assert(heuristic.determineQualityScore(state2) == 0)
 	}
 }

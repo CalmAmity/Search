@@ -31,17 +31,18 @@ class Stochastic[StateImplementation <: State[StateImplementation]](
 		val stateWeights = qualityScores.map(_ - lowestScore)
 		
 		// Determine the cumulative weights of the states in this list.
-		val cumulativeWeights = stateWeights.scanLeft(0d)((weight1, weight2) => weight1 + weight2)
+		val cumulativeWeights = stateWeights.scanLeft(0d)((weight1, weight2) => weight1 + weight2).tail
 		
-		cumulativeWeights.lastOption.map {
-			totalWeight =>
-				// Pick a random number between 0 and the total weight.
-				val randomValue = math.random() * totalWeight
-				// Use binary search to find the position of this random number in the list of cumulative weights.
-				val selectedStateIndex =
-					Util.binarySearch(randomValue, cumulativeWeights.map(java.lang.Double.valueOf).asJava)
-				// Return the state at this index.
-				nonDownhillSuccessors(selectedStateIndex)
+		if (cumulativeWeights.isEmpty) {
+			None
+		} else {
+			// Pick a random number between 0 and the total weight.
+			val randomValue = math.random() * cumulativeWeights.last
+			// Use binary search to find the position of this random number in the list of cumulative weights.
+			val selectedStateIndex =
+				Util.binarySearch(randomValue, cumulativeWeights.map(java.lang.Double.valueOf).asJava)
+			// Return the state at this index.
+			Some(nonDownhillSuccessors(selectedStateIndex))
 		}
 	}
 	

@@ -120,12 +120,25 @@ case class State(
 		val blankTile = findTileAt(blankPosition._1, blankPosition._2)
 		val slidingTile = findTileAt(slidingTileX, slidingTileY)
 		
-		val updatedTiles = tiles
-			// Take the row which currently holds the blank tile, and update it to reflect the fact that the sliding
-			// tile now occupies the space formerly occupied by the blank tile.
-			.updated(blankPosition._2, tiles(blankPosition._2).updated(blankPosition._1, slidingTile))
-			// Do the same the other way around.
-			.updated(slidingTileY, tiles(slidingTileY).updated(slidingTileX, blankTile))
+		val updatedTiles = if (blankPosition._2 == slidingTileY) {
+			// The two tiles being switched are in the same row, which means the move is horizontal. Update the same row
+			// twice.
+			tiles.updated(
+				slidingTileY
+				, tiles(slidingTileY)
+					.updated(blankPosition._1, slidingTile)
+					.updated(slidingTileX, blankTile)
+			)
+		} else {
+			// The two tiles being switched are in different rows, which means the move is vertical. Update the rows
+			// separately.
+			tiles
+				// Take the row which currently holds the blank tile, and update it to reflect the fact that the sliding
+				// tile now occupies the space formerly occupied by the blank tile.
+				.updated(blankPosition._2, tiles(blankPosition._2).updated(blankPosition._1, slidingTile))
+				// Do the same the other way around.
+				.updated(slidingTileY, tiles(slidingTileY).updated(slidingTileX, blankTile))
+		}
 		
 		State(updatedTiles, Some(this), this.cost + 1)
 	}
