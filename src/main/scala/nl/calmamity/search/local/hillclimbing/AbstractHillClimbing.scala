@@ -98,7 +98,7 @@ abstract class AbstractHillClimbing[StateImplementation <: State[StateImplementa
 		} while (nextState.isDefined)
 		
 		Util.logMemoryUsage()
-		log.info("Final state:\n{}", currentState)
+		log.info(s"Final state:\n$currentState\nWith quality score ${heuristic.determineQualityScore(currentState)}")
 		currentState
 	}
 }

@@ -3,6 +3,7 @@ package nl.calmamity.search.local.hillclimbing
 import nl.calmamity.search.local.queens.{NumberOfClashesHeuristic, State}
 import nl.calmamity.search.local.supereffective.{EffectivenessHeuristic, Team}
 import org.scalatest.FlatSpec
+import util.Util
 
 class HillClimbingTest extends FlatSpec {
 	"Random restart" should "climb a couple of hills" in {
@@ -34,8 +35,8 @@ class HillClimbingTest extends FlatSpec {
 	}
 	
 	it should "do something super-effective" in {
-		val randomRestart = new RandomRestart[Team](new EffectivenessHeuristic(), 10, Some(10), 0)
-		randomRestart.run(() => Team(6))
+		val randomRestart = new RandomRestart[Team](new EffectivenessHeuristic(), 10, Some(50), 0)
+		randomRestart.run(() => Team(2))
 	}
 	
 	"Steepest ascent" should "climb a single hill" in {
@@ -71,5 +72,27 @@ class HillClimbingTest extends FlatSpec {
 		val heuristic = new NumberOfClashesHeuristic()
 		val climb = new SimulatedAnnealing[State](state, heuristic, 1d / 5000, 1000)
 		climb.run()
+	}
+	
+	it should "find the superest effective" in {
+		val heuristic = new EffectivenessHeuristic()
+		val endStates = for (_ <- 1 to 100) yield {
+			val team = Team(3)
+			val climb = new SimulatedAnnealing[Team](team, heuristic, 1d / 5000, 1000)
+			climb.run()
+		}
+		
+		val endStatesWithScores = endStates
+			.distinct
+			.map {
+				team =>
+					(team, heuristic.determineQualityScore(team))
+			}
+			.sortWith {
+				case ((_, score1), (_, score2)) =>
+					score1 > score2
+			}
+			
+		System.out.println(s"Best scoring teams:\n${endStatesWithScores.mkString("\n")}")
 	}
 }

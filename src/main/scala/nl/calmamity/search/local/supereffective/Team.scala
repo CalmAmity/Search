@@ -43,6 +43,13 @@ case class Team(members: Seq[SatchelCreature]) extends State[Team] {
 	}
 	
 	override def toString: String = s"Team(${members.mkString(", ")})"
+	
+	override def equals(other: scala.Any): Boolean = other match {
+		case otherTeam: Team =>
+			this.members.toSet == otherTeam.members.toSet
+		case _ =>
+			false
+	}
 }
 
 object Team {

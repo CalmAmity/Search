@@ -68,8 +68,15 @@ case class SatchelCreature(
 	
 	def typesToExclude(componentIndex: Int): Seq[Option[Type.Value]] = {
 		componentIndex match {
+			case SatchelCreature.firstTypeIndex =>
+				Seq(None, Some(firstType), secondType) ++ (secondType match {
+					case Some(someType) =>
+						Type.nonExistentTypeCombinations.getOrElse(someType, Set()).map(Option.apply)
+					case None =>
+						Seq.empty
+				})
 			case SatchelCreature.secondTypeIndex =>
-				Seq(Some(firstType), secondType)
+				Seq(Some(firstType), secondType) ++ Type.nonExistentTypeCombinations.getOrElse(firstType, Set()).map(Option.apply)
 			case _ =>
 				Seq(None, determineComponentType(componentIndex))
 		}
@@ -95,17 +102,32 @@ case class SatchelCreature(
 		}
 		s"Creature($firstType$secondTypeString, Manoeuvres(${manoeuvreTypes.mkString(",")}))"
 	}
+	
+	override def equals(other: scala.Any): Boolean = other match {
+		case otherCreature: SatchelCreature =>
+			val creatureTypesMatch =
+				(this.firstType == otherCreature.firstType && this.secondType == otherCreature.secondType) ||
+				(this.secondType.contains(otherCreature.firstType) && otherCreature.secondType.contains(this.firstType))
+			
+			val manoeuvreTypesMatch = this.manoeuvreTypes.toSet == otherCreature.manoeuvreTypes.toSet
+			
+			creatureTypesMatch && manoeuvreTypesMatch
+		case _ =>
+			false
+	}
 }
 
 object SatchelCreature {
 	val numComponents = 6
+	val firstTypeIndex = 0
 	val secondTypeIndex = 1
 	val randomNumbers = new scala.util.Random()
 	
 	/** Creates a creature with random types for all components. */
 	def apply(): SatchelCreature = {
 		val firstType = pickRandomType
-		val availableSecondTypes = ((Type.values - firstType).map(Option.apply) + None).toSeq
+		val unavailableAsSecondType = Type.nonExistentTypeCombinations.getOrElse(firstType, Set.empty) + firstType
+		val availableSecondTypes = ((Type.values -- unavailableAsSecondType).map(Option.apply) + None).toSeq
 		val secondType = availableSecondTypes(randomNumbers.nextInt(availableSecondTypes.size))
 		SatchelCreature(
 			firstType

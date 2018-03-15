@@ -1,6 +1,7 @@
 package nl.calmamity.search.local.supereffective
 
 import org.scalatest.FlatSpec
+import Type._
 
 class TeamTest extends FlatSpec {
 	"randomlySelectAvailableAction" should "create a different team" in {
@@ -32,5 +33,22 @@ class TeamTest extends FlatSpec {
 			case (type1, type2) =>
 				type1 != type2
 		}
+	}
+	
+	"equals" should "properly detect equality" in {
+		val team1 = Team(Seq(
+			SatchelCreature(Water, Some(Steel), Seq(Grass, Fighting, Fairy, Ice))
+			, SatchelCreature(Fighting, Some(Normal), Seq(Normal, Ground, Flying, Bug))
+		))
+		val team2 = Team(Seq(
+			SatchelCreature(Normal, Some(Fighting), Seq(Ground, Flying, Normal, Bug))
+			, SatchelCreature(Steel, Some(Water), Seq(Fairy, Ice, Fighting, Grass))
+		))
+		assert(team1 == team2)
+		val team3 = Team(Seq(
+			SatchelCreature(Water, Some(Steel), Seq(Grass, Fighting, Fairy, Ice))
+			, SatchelCreature(Fighting, None, Seq(Normal, Ground, Flying, Bug))
+		))
+		assert(team1 != team3)
 	}
 }

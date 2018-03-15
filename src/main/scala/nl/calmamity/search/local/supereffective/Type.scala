@@ -21,4 +21,9 @@ object Type extends Enumeration {
 		, Steel
 		, Fairy
 		= Value
+	
+	val nonExistentTypeCombinations: Map[Value, Set[Value]] = Map(
+		Ice -> Set(Fairy)
+		, Fairy -> Set(Ice)
+	)
 }
