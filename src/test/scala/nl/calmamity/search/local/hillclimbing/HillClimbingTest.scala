@@ -1,11 +1,10 @@
 package nl.calmamity.search.local.hillclimbing
 
+import nl.calmamity.search.SearchTest
 import nl.calmamity.search.local.queens.{NumberOfClashesHeuristic, State}
 import nl.calmamity.search.local.supereffective.{EffectivenessHeuristic, Team}
-import org.scalatest.FlatSpec
-import util.Util
 
-class HillClimbingTest extends FlatSpec {
+class HillClimbingTest extends SearchTest {
 	"Random restart" should "climb a couple of hills" in {
 		val heuristic = new NumberOfClashesHeuristic()
 		val search = new RandomRestart[State](heuristic, 0, None, 0)
@@ -76,7 +75,8 @@ class HillClimbingTest extends FlatSpec {
 	
 	it should "find the superest effective" in {
 		val heuristic = new EffectivenessHeuristic()
-		val endStates = for (_ <- 1 to 100) yield {
+		val endStates = for (iteration <- 1 to 100) yield {
+			log.info(s"Starting iteration #$iteration.")
 			val team = Team(3)
 			val climb = new SimulatedAnnealing[Team](team, heuristic, 1d / 5000, 1000)
 			climb.run()
@@ -93,6 +93,6 @@ class HillClimbingTest extends FlatSpec {
 					score1 > score2
 			}
 			
-		System.out.println(s"Best scoring teams:\n${endStatesWithScores.mkString("\n")}")
+		log.info(s"Best scoring teams:\n${endStatesWithScores.mkString("\n")}")
 	}
 }

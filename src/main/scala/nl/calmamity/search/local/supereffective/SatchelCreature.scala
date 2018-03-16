@@ -71,14 +71,17 @@ case class SatchelCreature(
 			case SatchelCreature.firstTypeIndex =>
 				Seq(None, Some(firstType), secondType) ++ (secondType match {
 					case Some(someType) =>
-						Type.nonExistentTypeCombinations.getOrElse(someType, Set()).map(Option.apply)
+						Type.findTypesToExclude(someType).toSeq.map(Option.apply)
 					case None =>
 						Seq.empty
-				})
+				}) ++ Type.findTypesToExclude(secondType, manoeuvreTypes.toSet)
 			case SatchelCreature.secondTypeIndex =>
-				Seq(Some(firstType), secondType) ++ Type.nonExistentTypeCombinations.getOrElse(firstType, Set()).map(Option.apply)
+				Seq(Some(firstType), secondType) ++
+					Type.findTypesToExclude(firstType).toSeq.map(Option.apply) ++
+					Type.findTypesToExclude(Some(firstType), manoeuvreTypes.toSet)
 			case _ =>
-				Seq(None, determineComponentType(componentIndex))
+				Seq(None, determineComponentType(componentIndex)) ++
+					Type.findManoeuvreTypesToExclude(firstType, secondType).map(Option.apply).toSeq
 		}
 	}
 	
@@ -123,20 +126,37 @@ object SatchelCreature {
 	val secondTypeIndex = 1
 	val randomNumbers = new scala.util.Random()
 	
+	def apply(
+		firstType: Type.Value
+		, secondType: Type.Value
+		, manoeuvre1Type: Type.Value
+		, manoeuvre2Type: Type.Value
+		, manoeuvre3Type: Type.Value
+		, manoeuvre4Type: Type.Value
+	): SatchelCreature = SatchelCreature(
+		firstType, Some(secondType), Seq(manoeuvre1Type, manoeuvre2Type, manoeuvre3Type, manoeuvre4Type)
+	)
+	
 	/** Creates a creature with random types for all components. */
 	def apply(): SatchelCreature = {
-		val firstType = pickRandomType
-		val unavailableAsSecondType = Type.nonExistentTypeCombinations.getOrElse(firstType, Set.empty) + firstType
+		val firstType = pickRandomType(Type.values)
+		val unavailableAsSecondType = Type.findTypesToExclude(firstType)
 		val availableSecondTypes = ((Type.values -- unavailableAsSecondType).map(Option.apply) + None).toSeq
 		val secondType = availableSecondTypes(randomNumbers.nextInt(availableSecondTypes.size))
+		val availableAsManoeuvreTypes = Type.values -- Type.findManoeuvreTypesToExclude(firstType, secondType)
 		SatchelCreature(
 			firstType
 			, secondType
-			, Seq(pickRandomType, pickRandomType, pickRandomType, pickRandomType)
+			, Seq(
+				pickRandomType(availableAsManoeuvreTypes)
+				, pickRandomType(availableAsManoeuvreTypes)
+				, pickRandomType(availableAsManoeuvreTypes)
+				, pickRandomType(availableAsManoeuvreTypes)
+			)
 		)
 	}
 	
-	def pickRandomType: Type.Value = {
+	def pickRandomType(valuesToPickFrom: Set[Type.Value]): Type.Value = {
 		val typeIndex = randomNumbers.nextInt(Type.values.size)
 		Type.values.toSeq(typeIndex)
 	}

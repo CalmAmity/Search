@@ -1,7 +1,7 @@
 package nl.calmamity.search.local.supereffective
 
+import nl.calmamity.search.local.supereffective.Type._
 import org.scalatest.FlatSpec
-import Type._
 
 class SatchelCreatureTest extends FlatSpec {
 	"morph" should "produce all possible mutations of a creature" in {
@@ -37,6 +37,31 @@ class SatchelCreatureTest extends FlatSpec {
 			successorCreature =>
 				successorCreature.firstType == Ice && successorCreature.secondType.contains(Fairy)
 		})
+	}
+	
+	it should "not produce mutations with unavailable manoeuvre types" in {
+		val creature1 = SatchelCreature(Fairy, Flying, Normal, Normal, Normal, Normal)
+		val morphResults1 = creature1.createMutationsIterator().toList
+		assert(!morphResults1.exists{
+			successorCreature =>
+				successorCreature.manoeuvreTypes.contains(Ice)
+		})
+		
+		val creature2 = SatchelCreature(Flying, Fairy, Normal, Normal, Normal, Normal)
+		val morphResults2 = creature2.createMutationsIterator().toList
+		assert(!morphResults2.exists{
+			successorCreature =>
+				successorCreature.manoeuvreTypes.contains(Ice)
+		})
+		
+		
+		val creature3 = SatchelCreature(Normal, Flying, Ice, Normal, Normal, Normal)
+		val morphResults3 = creature3.createMutationsIterator().toList
+		assert(!morphResults3.exists(_.firstType == Fairy))
+		
+		val creature4 = SatchelCreature(Fairy, Normal, Ice, Normal, Normal, Normal)
+		val morphResults4 = creature4.createMutationsIterator().toList
+		assert(!morphResults4.exists(_.secondType.contains(Flying)))
 	}
 	
 	"equals" should "properly detect equality" in {
