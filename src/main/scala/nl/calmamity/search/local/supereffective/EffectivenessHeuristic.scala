@@ -9,7 +9,8 @@ class EffectivenessHeuristic extends Heuristic[Team] {
 		Type.values.toSeq
         	.flatMap {
 				typeValue =>
-					val allOtherTypes = (Type.values - typeValue).map(Option.apply) + None
+					val allOtherTypes =
+						((Type.values -- Type.findTypesToExclude(typeValue)) - typeValue).map(Option.apply) + None
 					allOtherTypes.toSeq.map {
 						otherType =>
 							(typeValue, otherType)

@@ -5,17 +5,18 @@ import util.Util
 import scala.collection.mutable
 
 /**
-  * Superclass of all heuristic functions.
+  * Defines the shared properties of heuristic functions.
   * @tparam StateImplementation The type of state that is checked by this heuristic.
   */
 trait Heuristic[StateImplementation <: State[StateImplementation]] {
 	/** The best score that a state can attain using this heuristic. */
 	val optimalScore: Double
 	
+	/** Maps a state's id to that state's quality score as determined by this heuristic. */
 	val qualityScoreCache: mutable.Map[Long, Double] = mutable.Map()
 	
 	/**
-	  * Determines the quality of the provided state using the heuristic function defined by this class, and stores it with the state.
+	  * Determines the quality of the provided state using the heuristic function defined by this class.
 	  * @param state The state for which to determine the quality.
 	  * @return The quality score of the provided state, as determined by the heuristic function.
 	  */
@@ -28,8 +29,15 @@ trait Heuristic[StateImplementation <: State[StateImplementation]] {
 	 * @param state The state for which to determine the quality.
 	 * @return The quality score for the provided state, as determined by the heuristic function.
 	 */
-	def estimateQualityScore(state: StateImplementation): Double
+	protected def estimateQualityScore(state: StateImplementation): Double
 	
+	/**
+	  * Determines whether the provided state has the optimal quality score for this heuristic.
+	  * @param state The state to check.
+	  * @param qualityMargin The quality margin to employ; if the difference between this state's score and the optimal
+	  * score is less than this value, the score will be regarded as optimal.
+	  * @return `true` if the provided state has the optimal score for this heuristic; `false` otherwise.
+	  */
 	def determineHasOptimalScore(state: StateImplementation, qualityMargin: Double): Boolean = {
 		determineIsOptimalScore(determineQualityScore(state), qualityMargin)
 	}

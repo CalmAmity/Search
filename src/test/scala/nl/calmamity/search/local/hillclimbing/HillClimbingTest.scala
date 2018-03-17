@@ -82,12 +82,14 @@ class HillClimbingTest extends SearchTest {
 			climb.run()
 		}
 		
-		val endStatesWithScores = endStates
-			.distinct
+		val endStatesSet = endStates.toSet
+		
+		val endStatesWithScores = endStatesSet
 			.map {
 				team =>
 					(team, heuristic.determineQualityScore(team))
 			}
+			.toSeq
 			.sortWith {
 				case ((_, score1), (_, score2)) =>
 					score1 > score2
